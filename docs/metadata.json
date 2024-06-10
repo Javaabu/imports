@@ -1,5 +1,5 @@
 {
-    "name": "{Your Package}",
-    "description": "{package description}",
+    "name": "Imports",
+    "description": "Streamline excel data import to your application",
     "version": "1"
 }
