@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Imports\Traits;
+namespace Javaabu\Imports\Traits;
 
-use App\Imports\ImportsRepository;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Http\Requests\ImportsRequest;
+use Javaabu\Imports\ImportsRepository;
+use Maatwebsite\Excel\Facades\Excel;
 
 trait ImportsData
 {

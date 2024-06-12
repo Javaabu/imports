@@ -1,11 +1,11 @@
-@extends('admin.imports.imports')
+@extends('imports::material-admin.imports.imports')
 
 @section('content')
-    @include('admin.imports._queued')
-    @include('admin.imports._errors')
-    @include('admin.imports._result')
+    @include('imports::material-admin.imports._queued')
+    @include('imports::material-admin.imports._errors')
+    @include('imports::material-admin.imports._result')
 
-    {!! Form::open(['method' => 'POST', 'route' => 'admin.imports.store', 'files' => true]) !!}
-        @include('admin.imports._form')
-    {!! Form::close() !!}
+    <x-forms::form method="POST" action="{{ route('admin.imports.store') }}" :files="true">
+        @include('imports::material-admin.imports._form')
+    </x-forms::form>
 @endsection

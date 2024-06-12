@@ -6,18 +6,17 @@
 
         <div class="row">
             @if(empty($hide_data_type))
-            <div class="col-md-8">
-                <div class="form-group">
-                    {!! Form::label('model', __('Data Type').' *') !!}
-                    {!! Form::select('model', ['' => ''] + $importables, old('model'), [
-                        'class' => add_error_class($errors->has('model')).' select2-basic',
-                        'data-placeholder' => __('Nothing Selected'),
-                        'data-allow-clear' => 'true',
-                        'required' => true
-                    ]) !!}
-                    @include('errors._list', ['error' => $errors->get('model')])
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <x-forms::select2
+                            name="model"
+                            label="{{ __('Data Type') }}"
+                            :options="$importables"
+                            placeholder="{{ __('Nothing Selected') }}"
+                            required="required"
+                        />
+                    </div>
                 </div>
-            </div>
             @endif
 
             <div class="col-md-4">
@@ -30,45 +29,51 @@
         </div>
 
         <div class="form-group">
-            {!! Form::label('import_file', __('Import File')) !!}
-            @component('admin.components.file-input', [
-                'file_input_id' => 'import_file',
-                'file_url' => null,
-                'accept' => \App\Helpers\Media\AllowedMimeTypes::getAllowedMimeTypesString('spreadsheet'),
-            ])
-            @endcomponent
-            @include('errors._list', ['error' => $errors->get('import_file')])
+            <x-forms::file
+                name="import_file"
+                label="{{ __('Import File') }}"
+                accept="{{ \Javaabu\Helpers\Media\AllowedMimeTypes::getAllowedMimeTypesString('spreadsheet') }}"
+                required="required"/>
         </div>
 
         <div class="form-group">
             <div class="checkbox">
-                {!! Form::checkbox('overwrite_duplicates', 1, old('overwrite_duplicates'), ['id' => 'overwrite_duplicates-chk']) !!}
-                <label for="overwrite_duplicates-chk" class="checkbox__label">{{ __('Overwrite duplicates') }}</label>
+                <x-forms::checkbox
+                    name="overwrite_duplicates"
+                    label="{{ __('Overwrite duplicates') }}"
+                    id="overwrite_duplicates-chk"
+                />
             </div>
-
-            @include('errors._list', ['error' => $errors->get('overwrite_duplicates')])
         </div>
 
         <h3 class="card-body__title">{{ __('What to do in case of validation errors?') }}</h3>
 
         <div class="form-group">
-            <div class="radio">
-                {!! Form::radio('error_handler', 'display', old('error_handler', 'display'), ['id' => 'error_handler-display-chk']) !!}
-                <label for="error_handler-display-chk" class="radio__label">{{ __('Display errors') }}</label>
-            </div>
+            <x-forms::radio
+                name="error_handler"
+                label="{{ __('Display errors') }}"
+                id="error_handler-display-chk"
+                value="display"
+                checked="checked"
+                :show-label="false"
+            />
 
-            <div class="radio">
-                {!! Form::radio('error_handler', 'download', old('error_handler'), ['id' => 'error_handler-download-chk']) !!}
-                <label for="error_handler-download-chk" class="radio__label">{{ __('Download rows with valid and invalid rows separated') }}</label>
-            </div>
-
-            @include('errors._list', ['error' => $errors->get('error_handler')])
+            <x-forms::radio
+                name="error_handler"
+                label="{{ __('Download rows with valid and invalid rows separated') }}"
+                id="error_handler-download-chk"
+                value="download"
+                :show-label="false"
+            />
         </div>
 
         <div class="button-group">
-            <button class="btn btn-success btn--icon-text btn--raised" data-confirm="">
-                <i class="zmdi zmdi-upload"></i> {{ $submit_btn ?? __('Import Data') }}
-            </button>
+            <x-forms::button type="submit"
+                             data-confirm=""
+                             class="btn btn-success btn--icon-text btn--raised">
+                <i class="zmdi zmdi-upload"></i>
+                {{  __('Import Data') }}
+            </x-forms::button>
         </div>
     </div>
 </div>

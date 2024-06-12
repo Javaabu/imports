@@ -17,14 +17,6 @@ use App\Imports\Importers\TonnageEndorsementsImporter;
 
 abstract class ImportsRepository
 {
-    protected static array $importables = [
-        'tonnage_endorsement' => TonnageEndorsementsImporter::class,
-    ];
-
-    public static function getImportables(): array
-    {
-        return self::$importables;
-    }
 
     /**
      * Get importables list.
@@ -34,7 +26,7 @@ abstract class ImportsRepository
     public static function getImportablesList(?User $user = null): array
     {
         $list = [];
-        $importables = self::getImportables();
+        $importables = Imports::getImportables();
 
         foreach ($importables as $model_slug => $importer) {
             if (empty($user) || $importer::canImport($user)) {
@@ -51,7 +43,7 @@ abstract class ImportsRepository
      */
     public static function canImportAny(User $user): bool
     {
-        $importables = self::getImportables();
+        $importables = Imports::getImportables();
 
         foreach ($importables as $model_slug => $importer) {
             if ($importer::canImport($user)) {
@@ -75,7 +67,7 @@ abstract class ImportsRepository
         $notifiable = null,
         array $meta = null
     ) {
-        $importable_class = self::getImportables()[$model_slug];
+        $importable_class = Imports::getImportables()[$model_slug];
 
         return new $importable_class($overwrite_duplicates, $error_handler, $notifiable, $model_slug, $meta);
     }
@@ -88,7 +80,7 @@ abstract class ImportsRepository
      */
     public static function getModelClass($importer_class)
     {
-        $importables = self::getImportables();
+        $importables = Imports::getImportables();
 
         foreach ($importables as $model_slug => $importer) {
             if ($importer == $importer_class) {

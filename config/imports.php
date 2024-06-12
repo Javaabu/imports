@@ -10,5 +10,8 @@ return [
     |
     */
 
+    'layout_view' => 'layouts.admin',
+    'view' => 'imports::material-admin.imports.index',
+
     // TODO
 ];

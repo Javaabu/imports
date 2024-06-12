@@ -17,6 +17,8 @@ class ImportsServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/imports.php' => config_path('imports.php'),
             ], 'imports-config');
         }
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'imports');
     }
 
     /**
