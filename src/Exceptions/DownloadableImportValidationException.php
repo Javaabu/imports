@@ -8,7 +8,7 @@
 
 namespace Javaabu\Imports\Exceptions;
 
-use App\Imports\Exports\ErrorsExport;
+use Javaabu\Imports\Exports\ErrorsExport;
 use Maatwebsite\Excel\Concerns\Exportable;
 
 class DownloadableImportValidationException extends ImportValidationException

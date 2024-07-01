@@ -17,7 +17,7 @@ class ImportsRequest extends FormRequest
     {
         return [
             'model' => 'string|required|in:' . implode(',', array_keys(ImportsRepository::getImportablesList($this->user()))),
-            'import_file' => AllowedMimeTypes::getValidationRule('spreadsheet') . '|required_unless:action,download_template',
+            'import_file' => AllowedMimeTypes::getValidationRule('excel') . '|required_unless:action,download_template',
             'action' => 'string|in:download_template',
             'overwrite_duplicates' => 'boolean',
             'error_handler' => 'in:download,display',

@@ -8,8 +8,8 @@
 
 namespace Javaabu\Imports\Exceptions;
 
-use App\Exceptions\AppException;
 use Illuminate\Http\JsonResponse;
+use Javaabu\Helpers\Exceptions\AppException;
 
 class ImportValidationException extends AppException
 {

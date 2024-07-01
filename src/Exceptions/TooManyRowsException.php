@@ -9,6 +9,7 @@
 namespace Javaabu\Imports\Exceptions;
 
 use Illuminate\Http\JsonResponse;
+use Javaabu\Helpers\Exceptions\AppException;
 
 class TooManyRowsException extends AppException
 {

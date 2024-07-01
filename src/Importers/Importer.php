@@ -3,6 +3,8 @@
 namespace Javaabu\Imports\Importers;
 
 use InvalidArgumentException;
+use Javaabu\Imports\Exceptions\DownloadableImportValidationException;
+use Javaabu\Imports\Exceptions\ImportValidationException;
 use Javaabu\Imports\Jobs\ImportData;
 use Illuminate\Support\Collection;
 use Javaabu\Imports\Exports\ErrorsExport;
