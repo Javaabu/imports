@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Imports\Notifications;
+namespace Javaabu\Imports\Notifications;
 
 use Illuminate\Support\Str;
 use Illuminate\Notifications\Notification;

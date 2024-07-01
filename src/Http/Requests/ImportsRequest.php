@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Imports\Http\Requests;
+namespace Javaabu\Imports\Http\Requests;
 
-use App\Imports\ImportsRepository;
-use App\Helpers\Media\AllowedMimeTypes;
 use Illuminate\Foundation\Http\FormRequest;
+use Javaabu\Helpers\Media\AllowedMimeTypes;
+use Javaabu\Imports\ImportsRepository;
 
 class ImportsRequest extends FormRequest
 {

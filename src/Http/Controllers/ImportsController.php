@@ -3,8 +3,8 @@
 namespace Javaabu\Imports\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Javaabu\Imports\Http\Requests\ImportsRequest;
 use Javaabu\Imports\Traits\ImportsData;
-use App\Imports\Http\Requests\ImportsRequest;
 use Javaabu\Auth\User;
 use Javaabu\Helpers\Http\Controllers\Controller;
 use Javaabu\Imports\ImportsRepository;

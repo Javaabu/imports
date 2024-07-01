@@ -33,7 +33,7 @@
                 name="import_file"
                 label="{{ __('Import File') }}"
                 accept="{{ \Javaabu\Helpers\Media\AllowedMimeTypes::getAllowedMimeTypesString('spreadsheet') }}"
-                required="required"/>
+                />
         </div>
 
         <div class="form-group">

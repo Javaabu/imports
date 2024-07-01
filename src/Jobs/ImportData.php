@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Imports\Jobs;
+namespace Javaabu\Imports\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Collection;
-use App\Imports\Importers\Importer;
+use Javaabu\Imports\Importers\Importer;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Imports\Exceptions\ImportValidationException;
-use App\Imports\Notifications\ImportFailedNotification;
-use App\Imports\Notifications\ImportResultNotification;
-use App\Imports\Notifications\ImportValidationErrorsNotification;
+use Javaabu\Imports\Exceptions\ImportValidationException;
+use Javaabu\Imports\Notifications\ImportFailedNotification;
+use Javaabu\Imports\Notifications\ImportResultNotification;
+use Javaabu\Imports\Notifications\ImportValidationErrorsNotification;
 
 class ImportData implements ShouldQueue
 {

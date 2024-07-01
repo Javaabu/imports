@@ -2,22 +2,19 @@
 
 namespace Javaabu\Imports\Importers;
 
-use App\Helpers\User\User;
 use InvalidArgumentException;
-use App\Imports\Jobs\ImportData;
-use App\Imports\ImportsRepository;
+use Javaabu\Imports\Jobs\ImportData;
 use Illuminate\Support\Collection;
-use App\Imports\Exports\ErrorsExport;
-use App\Imports\Exports\ImportTemplate;
+use Javaabu\Imports\Exports\ErrorsExport;
+use Javaabu\Imports\Exports\ImportTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Validator;
+use Javaabu\Auth\User;
+use Javaabu\Imports\ImportsRepository;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use App\Imports\Exceptions\TooManyRowsException;
-use App\Imports\Exceptions\ImportValidationException;
-use App\Imports\Exceptions\DownloadableImportValidationException;
 
 abstract class Importer implements ToCollection, WithHeadingRow
 {

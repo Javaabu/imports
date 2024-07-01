@@ -2,7 +2,8 @@
 
 namespace Javaabu\Imports\Traits;
 
-use App\Imports\Http\Requests\ImportsRequest;
+use Javaabu\Imports\Contracts\IsImporter;
+use Javaabu\Imports\Http\Requests\ImportsRequest;
 use Javaabu\Imports\ImportsRepository;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -29,6 +30,7 @@ trait ImportsData
 
         $overwrite_duplicates = ! empty($request->input('overwrite_duplicates', false));
 
+        /* @var IsImporter $importer */
         $importer = ImportsRepository::getImporter(
             $model,
             $overwrite_duplicates,

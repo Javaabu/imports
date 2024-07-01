@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Imports\Exports;
+namespace Javaabu\Imports\Exports;
 
 use Maatwebsite\Excel\Concerns\Exportable;
 use App\Imports\Exports\Sheets\ValidRowsSheet;

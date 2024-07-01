@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Imports\Importers;
+
+use App\Models\User;
+use App\Models\{{ ModelName }};
+use Illuminate\Database\Eloquent\Model;
+use Javaabu\Imports\Importers\Importer;
+
+class {{ ImporterClassName }} extends Importer
+{
+    public function dummyData(): array
+    {
+        return [
+            [
+                'Sample Name',
+            ],
+        ];
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Name *',
+        ];
+    }
+
+    public function rowValidationRules(array $row): array
+    {
+        return [
+            'name'                         => ['required', 'string', 'max:255'],
+        ];
+    }
+
+    public function getExistingModel(array $row): ?Model
+    {
+        return {{ ModelName }}::where('name', $row['name'])->first();
+    }
+
+    public function saveRow(array $row, Model $existing_model = null): Model
+    {
+        if ($existing_model) {
+            $model = $existing_model;
+        } else {
+            $model = new {{ ModelName }};
+        }
+
+        $model->name = $row['name'];
+
+        $model->save();
+
+        return $model;
+    }
+
+    public static function canImport(?User $user = null): bool
+    {
+        return auth()->user()->can('create', {{ ModelName }}::class);
+    }
+}

@@ -3,6 +3,7 @@
 namespace Javaabu\Imports;
 
 use Illuminate\Support\ServiceProvider;
+use Javaabu\Imports\Commands\CreateImportCommand;
 
 class ImportsServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,10 @@ class ImportsServiceProvider extends ServiceProvider
         }
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'imports');
+
+        $this->commands([
+            CreateImportCommand::class,
+        ]);
     }
 
     /**
