@@ -2,10 +2,9 @@
 
 namespace Javaabu\Imports;
 
-use App\Imports\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Str;
-use Javaabu\Auth\User;
 
 abstract class ImportsRepository
 {

@@ -16,14 +16,26 @@ trait ImportsData
 
     public function index(Request $request): View
     {
-        $importables = ImportsRepository::getImportablesList($request->user());
-        $view = $this->getIndexView();
-        return view($view, compact('importables'));
+        return view($this->getIndexView(), [
+            'importables'     => ImportsRepository::getImportablesList($request->user()),
+            'store_route_url' => $this->getStoreRouteUrl(),
+            'layouts_view'    => $this->getLayoutsView(),
+        ]);
     }
 
     public function getIndexView(): string
     {
         return 'imports::material-admin.imports.index';
+    }
+
+    public function getStoreRouteUrl(): string
+    {
+        return route('imports.store');
+    }
+
+    public function getLayoutsView(): string
+    {
+        return 'layouts.admin';
     }
 
     public function store(ImportsRequest $request): Redirector|RedirectResponse
@@ -76,17 +88,17 @@ trait ImportsData
             Excel::import($importer, $request->file('import_file'));
         } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
             return $redirect->withErrors([
-                'import_file' => 'The imported file is empty'
+                'import_file' => 'The imported file is empty',
             ]);
         }
 
         $this->flashSuccessMessage();
 
         $import_result = [
-            'num_imported' => $importer->count(),
+            'num_imported'   => $importer->count(),
             'num_duplicates' => $importer->numDuplicates(),
-            'duplicates' => $importer->duplicates(),
-            'overwrite' => $overwrite_duplicates,
+            'duplicates'     => $importer->duplicates(),
+            'overwrite'      => $overwrite_duplicates,
         ];
 
         return $redirect->with('import_result', $import_result);

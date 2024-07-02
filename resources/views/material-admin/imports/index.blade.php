@@ -5,7 +5,7 @@
     @include('imports::material-admin.imports._errors')
     @include('imports::material-admin.imports._result')
 
-    <x-forms::form method="POST" action="{{ route('admin.imports.store') }}" :files="true">
+    <x-forms::form method="POST" action="{{ $store_route_url }}" :files="true">
         @include('imports::material-admin.imports._form')
     </x-forms::form>
 @endsection

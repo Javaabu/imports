@@ -4,8 +4,6 @@
 [![Test Status](../../actions/workflows/run-tests.yml/badge.svg)](../../actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/javaabu/imports.svg?style=flat-square)](https://packagist.org/packages/javaabu/imports)
 
-
-
 ## Introduction
 Streamline excel data import to your application
 
@@ -17,6 +15,35 @@ Find yourself stuck using the package? Found a bug? Do you have general question
 
 If you've found a bug regarding security please mail [info@javaabu.com](mailto:info@javaabu.com) instead of using the issue tracker.
 
+## Usage
+Install the package via composer:
+
+```bash
+composer require javaabu/imports
+```
+
+Create your controller and use the `ImportsData` trait
+```php
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Javaabu\Imports\Traits\ImportsData;
+
+class ImportsController extends Controller
+{
+    use ImportsData;
+}
+```
+
+Register your routes
+```php
+    Route::get('import', [ImportsController::class, 'index'])->name('imports.index');
+    Route::post('import', [ImportsController::class, 'store'])->name('imports.store');
+```
+
+For more customization you can override the methods in `ImportsData` trait.
 
 ## Testing
 

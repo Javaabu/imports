@@ -12,10 +12,6 @@ class RouteTest extends TestCase
 
     public function test_admin_can_visit_imports_index_view()
     {
-        $this->withoutExceptionHandling();
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $response = $this->get(route('imports.index'));
         $response->assertStatus(200);
     }
@@ -23,6 +19,6 @@ class RouteTest extends TestCase
     public function test_imports_store_route()
     {
         $response = $this->post(route('imports.store'));
-        $response->assertStatus(200);
+        $response->assertSessionHasErrors(['model']);
     }
 }
