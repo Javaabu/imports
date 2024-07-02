@@ -2,9 +2,10 @@
 
 namespace Javaabu\Imports;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Database\Eloquent\Model;
+use Javaabu\Imports\Importers\Importer;
 
 abstract class ImportsRepository
 {
@@ -46,9 +47,6 @@ abstract class ImportsRepository
 
     /**
      * Get the instantiated importer from the model class
-     *
-     * @param  Notifiable|null  $notifiable
-     * @return Importer
      */
     public static function getImporter(
         $model_slug,
@@ -56,7 +54,7 @@ abstract class ImportsRepository
         $error_handler = null,
         $notifiable = null,
         ?array $meta = null
-    ) {
+    ): Importer {
         $importable_class = Imports::getImportables()[$model_slug];
 
         return new $importable_class($overwrite_duplicates, $error_handler, $notifiable, $model_slug, $meta);
@@ -64,10 +62,8 @@ abstract class ImportsRepository
 
     /**
      * Get the model class from the importer
-     *
-     * @return string
      */
-    public static function getModelClass($importer_class)
+    public static function getModelClass($importer_class): ?string
     {
         $importables = Imports::getImportables();
 

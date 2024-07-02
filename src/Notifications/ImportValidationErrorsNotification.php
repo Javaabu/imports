@@ -2,10 +2,10 @@
 
 namespace Javaabu\Imports\Notifications;
 
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\Support\HtmlString;
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class ImportValidationErrorsNotification extends Notification
 {

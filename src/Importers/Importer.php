@@ -2,123 +2,67 @@
 
 namespace Javaabu\Imports\Importers;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 use InvalidArgumentException;
-use Javaabu\Auth\User;
-use Javaabu\Imports\Exceptions\DownloadableImportValidationException;
-use Javaabu\Imports\Exceptions\ImportValidationException;
+use Illuminate\Support\Collection;
+use Illuminate\Foundation\Auth\User;
+use Javaabu\Imports\Jobs\ImportData;
+use Javaabu\Imports\ImportsRepository;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
 use Javaabu\Imports\Exports\ErrorsExport;
 use Javaabu\Imports\Exports\ImportTemplate;
-use Javaabu\Imports\ImportsRepository;
-use Javaabu\Imports\Jobs\ImportData;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Javaabu\Imports\Exceptions\TooManyRowsException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Javaabu\Imports\Exceptions\ImportValidationException;
+use Javaabu\Imports\Exceptions\DownloadableImportValidationException;
 
 abstract class Importer implements ToCollection, WithHeadingRow
 {
-    /**
-     * Whether the import should not be queued
-     *
-     * @var bool
-     */
-    protected $non_queued = false;
+    /** Whether the import should not be queued */
+    protected bool $non_queued = false;
 
-    /**
-     * Min. number of rows required to trigger a queue
-     *
-     * @var int
-     */
-    protected $queue_threshold = 100;
+    /** Min. number of rows required to trigger a queue */
+    protected int $queue_threshold = 100;
 
-    /**
-     * The name of the queue to be used
-     *
-     * @var string
-     */
-    protected $queue_name = null;
+    /** The name of the queue to be used */
+    protected ?string $queue_name = null;
 
-    /**
-     * The name of the queue connection to be used
-     *
-     * @var string
-     */
-    protected $queue_connection = null;
+    /** The name of the queue connection to be used */
+    protected ?string $queue_connection = null;
 
-    /**
-     * Whether to overwrite duplicates
-     *
-     * @var bool
-     */
-    protected $overwrite_duplicates = false;
+    /* Whether to overwrite duplicates +*/
+    protected bool $overwrite_duplicates = false;
 
-    /**
-     * Whether to download errors
-     *
-     * @var bool
-     */
-    protected $download_errors = false;
+    /* Whether to download errors */
+    protected bool $download_errors = false;
 
-    /**
-     * Get the duplicates
-     *
-     * @var array
-     */
-    protected $duplicates = [];
+    /* Get the duplicates */
+    protected array $duplicates = [];
 
-    /**
-     * The number of rows
-     *
-     * @var int
-     */
-    protected $num_rows = 0;
+    /** The number of rows */
+    protected int $num_rows = 0;
 
-    /**
-     * The notifiable
-     *
-     * @var Notifiable
-     */
+    /** The notifiable */
     protected $notifiable;
 
-    /**
-     * The file name
-     *
-     * @var string
-     */
-    protected $file_name;
+    /**  The file name */
+    protected ?string $file_name;
 
-    /**
-     * The importable slug
-     *
-     * @var string
-     */
-    protected $importable;
+    /** The importable slug */
+    protected ?string $importable;
 
-    /**
-     * The importable meta
-     *
-     * @var array
-     */
-    protected $meta;
+    /** The importable meta */
+    protected array $meta;
 
-    /**
-     * Constructor
-     *
-     * @param  bool  $overwrite_duplicates
-     * @param  null  $error_handler
-     * @param  Notifiable|null  $notifiable
-     * @param  null  $importable
-     * @param  array  $meta
-     */
     public function __construct(
-        $overwrite_duplicates = false,
+        bool $overwrite_duplicates = false,
         $error_handler = null,
         $notifiable = null,
         $importable = null,
-        $meta = null
+        ?array $meta = null
     ) {
         $this->setOverwriteDuplicates($overwrite_duplicates);
         $this->setErrorHandler($error_handler);
@@ -159,8 +103,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Whether the current user can import using
      * this importer
-     *
-     * @param  ?User  $user
      */
     public static function canImport(?User $user = null): bool
     {
@@ -175,30 +117,24 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Check whether to download errors
-     *
-     * @return bool
      */
-    public function shouldDownloadErrors()
+    public function shouldDownloadErrors(): bool
     {
         return $this->download_errors;
     }
 
     /**
      * Check whether to overwrite duplicates
-     *
-     * @return bool
      */
-    public function shouldOverwriteDuplicates()
+    public function shouldOverwriteDuplicates(): bool
     {
         return $this->overwrite_duplicates;
     }
 
     /**
      * Set whether to not queue
-     *
-     * @param  bool  $non_queued
      */
-    public function setNonQueued($non_queued = true): Importer
+    public function setNonQueued(bool $non_queued = true): Importer
     {
         $this->non_queued = $non_queued;
 
@@ -207,10 +143,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Set the meta data
-     *
-     * @param  array  $meta
      */
-    public function setMeta($meta = null): Importer
+    public function setMeta(?array $meta = null): Importer
     {
         $this->meta = $meta;
 
@@ -219,10 +153,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Set whether to overwrite duplicates
-     *
-     * @param  bool  $overwrite
      */
-    public function setOverwriteDuplicates($overwrite = true): Importer
+    public function setOverwriteDuplicates(bool $overwrite = true): Importer
     {
         $this->overwrite_duplicates = $overwrite;
 
@@ -231,10 +163,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Set whether to download errors
-     *
-     * @param  bool  $download
      */
-    public function setShouldDownloadErrors($download = true): Importer
+    public function setShouldDownloadErrors(bool $download = true): Importer
     {
         $this->download_errors = $download;
 
@@ -243,10 +173,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the current user
-     *
-     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         if ($this->notifiable instanceof User) {
             return $this->notifiable;
@@ -257,10 +185,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the meta data
-     *
-     * @return array
      */
-    public function getMeta()
+    public function getMeta(): array
     {
         return $this->meta;
     }
@@ -281,20 +207,14 @@ abstract class Importer implements ToCollection, WithHeadingRow
         return $this->queue_connection;
     }
 
-    /**
-     * @param  string  $queue_name
-     */
-    public function setQueueName($queue_name): Importer
+    public function setQueueName(?string $queue_name): Importer
     {
         $this->queue_name = $queue_name;
 
         return $this;
     }
 
-    /**
-     * @param  string  $queue_connection
-     */
-    public function setQueueConnection($queue_connection): Importer
+    public function setQueueConnection(?string $queue_connection): Importer
     {
         $this->queue_connection = $queue_connection;
 
@@ -342,10 +262,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Set the error handler
-     *
-     * @param  string  $handler  download|display
      */
-    public function setErrorHandler($handler)
+    public function setErrorHandler(?string $handler): void
     {
         if ($handler && (! in_array($handler, ['display', 'download']))) {
             throw new InvalidArgumentException('Invalid import error handler value.');
@@ -356,10 +274,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the import template
-     *
-     * @return Exportable
      */
-    public function importTemplate()
+    public function importTemplate(): ImportTemplate
     {
         return new ImportTemplate(
             $this->headings(),
@@ -369,10 +285,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the import template file name
-     *
-     * @return string
      */
-    public function importTemplateFileName()
+    public function importTemplateFileName(): string
     {
         $class_name = class_basename(get_class($this));
 
@@ -381,10 +295,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Download import template
-     *
-     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function downloadImportTemplate()
+    public function downloadImportTemplate(): Response|BinaryFileResponse
     {
         return $this->importTemplate()
             ->download($this->importTemplateFileName());
@@ -392,10 +304,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the errors export file name
-     *
-     * @return string
      */
-    public function errorsExportFileName()
+    public function errorsExportFileName(): string
     {
         $class_name = class_basename(get_class($this));
 
@@ -404,10 +314,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the errors export template
-     *
-     * @return Exportable
      */
-    public function errorsExport(array $valid_rows, array $invalid_rows)
+    public function errorsExport(array $valid_rows, array $invalid_rows): ErrorsExport
     {
         return new ErrorsExport(
             $valid_rows,
@@ -419,7 +327,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Validate and save the collection
      */
-    public function collection(Collection $collection)
+    public function collection(Collection $collection): void
     {
         $this->validate($collection);
 
@@ -435,7 +343,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Dispatch import job
      */
-    protected function dispatchImportJob(Collection $data)
+    protected function dispatchImportJob(Collection $data): void
     {
         $job = ImportData::dispatch(
             $data,
@@ -561,7 +469,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
      * Validate the data for the give collection
      * and keep track of the errors
      */
-    protected function validate(Collection $rows)
+    protected function validate(Collection $rows): void
     {
         $this->num_rows = 0;
 
@@ -607,7 +515,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Save the collection data to the db
      */
-    public function save(Collection $rows)
+    public function save(Collection $rows): void
     {
         $row_id = 0;
         $this->duplicates = [];

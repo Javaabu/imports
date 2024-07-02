@@ -2,10 +2,10 @@
 
 namespace Javaabu\Imports\Exports;
 
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class ImportTemplate implements FromArray, ShouldAutoSize, WithHeadings
 {

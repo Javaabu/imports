@@ -2,9 +2,9 @@
 
 namespace Javaabu\Imports\Http\Requests;
 
+use Javaabu\Imports\ImportsRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Javaabu\Helpers\Media\AllowedMimeTypes;
-use Javaabu\Imports\ImportsRepository;
 
 class ImportsRequest extends FormRequest
 {

@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\View;
 use Javaabu\Forms\FormsServiceProvider;
 use Javaabu\Helpers\HelpersServiceProvider;
 use Javaabu\Imports\ImportsServiceProvider;
-use Javaabu\Imports\Tests\TestSupport\Providers\TestServiceProvider;
 use Javaabu\Settings\SettingsServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Javaabu\Imports\Tests\TestSupport\Providers\TestServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {

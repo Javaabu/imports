@@ -2,9 +2,9 @@
 
 namespace Javaabu\Imports\Tests\TestSupport\Providers;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Javaabu\Imports\Tests\TestSupport\Models\User;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class TestServiceProvider extends ServiceProvider
 {

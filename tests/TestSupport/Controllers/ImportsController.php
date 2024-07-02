@@ -2,8 +2,8 @@
 
 namespace Javaabu\Imports\Tests\TestSupport\Controllers;
 
-use Javaabu\Helpers\Http\Controllers\Controller;
 use Javaabu\Imports\Traits\ImportsData;
+use Javaabu\Helpers\Http\Controllers\Controller;
 
 class ImportsController extends Controller
 {

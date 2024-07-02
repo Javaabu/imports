@@ -3,15 +3,15 @@
 namespace Javaabu\Imports\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Javaabu\Imports\Exceptions\ImportValidationException;
+use Illuminate\Queue\SerializesModels;
 use Javaabu\Imports\Importers\Importer;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Javaabu\Imports\Exceptions\ImportValidationException;
 use Javaabu\Imports\Notifications\ImportFailedNotification;
 use Javaabu\Imports\Notifications\ImportResultNotification;
 use Javaabu\Imports\Notifications\ImportValidationErrorsNotification;

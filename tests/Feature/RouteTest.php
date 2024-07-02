@@ -2,8 +2,8 @@
 
 namespace Javaabu\Imports\Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Javaabu\Imports\Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RouteTest extends TestCase
 {

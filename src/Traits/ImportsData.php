@@ -2,14 +2,15 @@
 
 namespace Javaabu\Imports\Traits;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Javaabu\Imports\Http\Requests\ImportsRequest;
-use Javaabu\Imports\Importers\Importer;
-use Javaabu\Imports\ImportsRepository;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\RedirectResponse;
+use Javaabu\Imports\ImportsRepository;
+use Javaabu\Imports\Http\Requests\ImportsRequest;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 trait ImportsData
 {
@@ -50,18 +51,12 @@ trait ImportsData
         return redirect()->to(action(self::class, 'index'));
     }
 
-    /*
-     * Import
-     *
-     * @return Response
-     */
-    public function importData(ImportsRequest $request, $meta = null)
+    public function importData(ImportsRequest $request, $meta = null): Response|BinaryFileResponse|Redirector|RedirectResponse
     {
         $model = $request->input('model');
 
         $overwrite_duplicates = ! empty($request->input('overwrite_duplicates', false));
 
-        /* @var Importer $importer */
         $importer = ImportsRepository::getImporter(
             $model,
             $overwrite_duplicates,
