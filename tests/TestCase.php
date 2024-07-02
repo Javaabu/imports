@@ -2,6 +2,7 @@
 
 namespace Javaabu\Imports\Tests;
 
+use Javaabu\Forms\FormsServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Javaabu\Imports\ImportsServiceProvider;
 use Javaabu\Imports\Tests\TestSupport\Providers\TestServiceProvider;
@@ -23,7 +24,8 @@ abstract class TestCase extends BaseTestCase
     {
         return [
             ImportsServiceProvider::class,
-            TestServiceProvider::class
+            TestServiceProvider::class,
+            FormsServiceProvider::class,
         ];
     }
 }

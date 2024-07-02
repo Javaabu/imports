@@ -2,6 +2,10 @@
 
 namespace Javaabu\Imports\Traits;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 use Javaabu\Imports\Contracts\IsImporter;
 use Javaabu\Imports\Http\Requests\ImportsRequest;
 use Javaabu\Imports\ImportsRepository;
@@ -9,14 +13,32 @@ use Maatwebsite\Excel\Facades\Excel;
 
 trait ImportsData
 {
+
+    public function index(Request $request): View
+    {
+        $importables = ImportsRepository::getImportablesList($request->user());
+        $view = $this->getIndexView();
+        return view($view, compact('importables'));
+    }
+
+    public function getIndexView(): string
+    {
+        return 'imports::material-admin.imports.index';
+    }
+
+    public function store(ImportsRequest $request): Redirector|RedirectResponse
+    {
+        return $this->importData($request);
+    }
+
     /**
      * Get the redirector
      *
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     * @return Redirector|RedirectResponse
      */
-    public function getImportRedirect()
+    public function getImportRedirect(): Redirector|RedirectResponse
     {
-        return redirect()->back();
+        return redirect()->to(action(self::class, 'index'));
     }
 
     /*
