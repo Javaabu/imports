@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Javaabu\Helpers\Exceptions\AppException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ImportValidationException extends AppException
 {
@@ -36,7 +37,7 @@ class ImportValidationException extends AppException
     /**
      * Send json response
      */
-    protected function sendHttpResponse(): Response|RedirectResponse
+    protected function sendHttpResponse(): Response|RedirectResponse|BinaryFileResponse
     {
         return back()->withErrors($this->getErrors(), 'import_errors');
     }

@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Javaabu\Helpers\Exceptions\AppException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TooManyRowsException extends AppException
 {
@@ -51,7 +52,7 @@ class TooManyRowsException extends AppException
     /**
      * Send json response
      */
-    protected function sendHttpResponse(): Response|RedirectResponse
+    protected function sendHttpResponse(): Response|RedirectResponse|BinaryFileResponse
     {
         return back()->with([
             'row_count' => $this->getCount(),

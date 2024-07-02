@@ -38,7 +38,7 @@ trait ImportsData
         return 'layouts.admin';
     }
 
-    public function store(ImportsRequest $request): Redirector|RedirectResponse
+    public function store(ImportsRequest $request): Redirector|RedirectResponse|BinaryFileResponse
     {
         return $this->importData($request);
     }
@@ -48,7 +48,7 @@ trait ImportsData
      */
     public function getImportRedirect(): Redirector|RedirectResponse
     {
-        return redirect()->to(action(self::class, 'index'));
+        return redirect()->to(action([self::class, 'index']));
     }
 
     public function importData(ImportsRequest $request, $meta = null): Response|BinaryFileResponse|Redirector|RedirectResponse

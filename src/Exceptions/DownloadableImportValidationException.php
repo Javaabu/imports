@@ -11,6 +11,7 @@ namespace Javaabu\Imports\Exceptions;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Javaabu\Imports\Exports\ErrorsExport;
 
 class DownloadableImportValidationException extends ImportValidationException
@@ -50,7 +51,7 @@ class DownloadableImportValidationException extends ImportValidationException
     /**
      * Send json response
      */
-    protected function sendHttpResponse(): Response|RedirectResponse
+    protected function sendHttpResponse(): Response|RedirectResponse|BinaryFileResponse
     {
         return $this->getExportable()->download($this->getExportFileName());
     }

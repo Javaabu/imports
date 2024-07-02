@@ -55,7 +55,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     protected ?string $importable;
 
     /** The importable meta */
-    protected array $meta;
+    protected ?array $meta;
 
     public function __construct(
         bool $overwrite_duplicates = false,

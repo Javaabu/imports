@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Imports\Exports\Sheets;
+namespace Javaabu\Imports\Exports\Sheets;
 
 class ValidRowsSheet extends InvalidRowsSheet
 {
