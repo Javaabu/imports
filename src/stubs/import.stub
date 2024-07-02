@@ -2,8 +2,8 @@
 
 namespace App\Imports\Importers;
 
-use App\Models\User;
 use App\Models\{{ ModelName }};
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 use Javaabu\Imports\Importers\Importer;
 
