@@ -30,7 +30,7 @@ trait ImportsData
 
     public function getStoreRouteUrl(): string
     {
-        return route('imports.store');
+        return route('admin.imports.store');
     }
 
     public function getLayoutsView(): string

@@ -8,4 +8,9 @@ use Javaabu\Imports\Traits\ImportsData;
 class ImportsController extends Controller
 {
     use ImportsData;
+
+    public function getStoreRouteUrl(): string
+    {
+        return route('imports.store');
+    }
 }
