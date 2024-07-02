@@ -13,18 +13,18 @@ class CreateImportCommand extends Command
     public function handle(): void
     {
         $table_name = $this->argument('table_name');
-        $importer = file_get_contents(__DIR__ . '/../stubs/import.stub');
-        $importer_classname = str($table_name)->singular()->studly()->replace('_', '')->toString() . 'Importer';
+        $importer = file_get_contents(__DIR__.'/../stubs/import.stub');
+        $importer_classname = str($table_name)->singular()->studly()->replace('_', '')->toString().'Importer';
         $importer = str_replace([
             '{{ ModelName }}',
-            '{{ ImporterClassName }}'
+            '{{ ImporterClassName }}',
         ], [
             str($table_name)->singular()->studly()->replace('_', '')->toString(),
             $importer_classname,
         ], $importer);
 
         $target_directory = app_path('Imports/Importers');
-        if (!is_dir($target_directory)) {
+        if (! is_dir($target_directory)) {
             mkdir($target_directory, 0755, true);
         }
 

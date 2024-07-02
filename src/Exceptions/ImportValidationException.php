@@ -3,6 +3,7 @@
  * Custom Exception
  *
  * @author Arushad Ahmed (@dash8x)
+ *
  * @author_uri http://arushad.org
  */
 
@@ -21,9 +22,8 @@ class ImportValidationException extends AppException
     /**
      * Constructor
      *
-     * @param array $errors
-     * @param string $message
-     * @param string $name
+     * @param  string  $message
+     * @param  string  $name
      */
     public function __construct(array $errors, $message = 'Import data is invalid', $name = 'ImportValidationErrors')
     {
@@ -61,8 +61,7 @@ class ImportValidationException extends AppException
     {
         return response()->json([
             'message' => $this->getMessage(),
-            'errors' => $this->getErrors()
+            'errors' => $this->getErrors(),
         ], $this->getStatusCode());
     }
-
 }

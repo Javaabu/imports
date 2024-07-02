@@ -3,15 +3,15 @@
 namespace Javaabu\Imports\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Collection;
-use Javaabu\Imports\Importers\Importer;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Javaabu\Imports\Exceptions\ImportValidationException;
+use Javaabu\Imports\Importers\Importer;
 use Javaabu\Imports\Notifications\ImportFailedNotification;
 use Javaabu\Imports\Notifications\ImportResultNotification;
 use Javaabu\Imports\Notifications\ImportValidationErrorsNotification;
@@ -78,13 +78,10 @@ class ImportData implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Collection $data
-     * @param $importer_class
-     * @param $file_name
-     * @param bool $overwrite_duplicates
-     * @param Notifiable|null $notifiable
-     * @param null $meta
-     * @param null $importable
+     * @param  bool  $overwrite_duplicates
+     * @param  Notifiable|null  $notifiable
+     * @param  null  $meta
+     * @param  null  $importable
      */
     public function __construct(
         Collection $data,
@@ -112,7 +109,7 @@ class ImportData implements ShouldQueue
     public function handle()
     {
         $importer = $this->getImporter()
-                        ->setNonQueued();
+            ->setNonQueued();
 
         $model_type = $this->importable;
 
@@ -159,8 +156,6 @@ class ImportData implements ShouldQueue
 
     /**
      * Get the importer
-     *
-     * @return Importer
      */
     protected function getImporter(): Importer
     {

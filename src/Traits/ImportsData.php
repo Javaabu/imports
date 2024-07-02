@@ -6,20 +6,19 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Javaabu\Imports\Contracts\IsImporter;
 use Javaabu\Imports\Http\Requests\ImportsRequest;
+use Javaabu\Imports\Importers\Importer;
 use Javaabu\Imports\ImportsRepository;
 use Maatwebsite\Excel\Facades\Excel;
 
 trait ImportsData
 {
-
     public function index(Request $request): View
     {
         return view($this->getIndexView(), [
-            'importables'     => ImportsRepository::getImportablesList($request->user()),
+            'importables' => ImportsRepository::getImportablesList($request->user()),
             'store_route_url' => $this->getStoreRouteUrl(),
-            'layouts_view'    => $this->getLayoutsView(),
+            'layouts_view' => $this->getLayoutsView(),
         ]);
     }
 
@@ -45,8 +44,6 @@ trait ImportsData
 
     /**
      * Get the redirector
-     *
-     * @return Redirector|RedirectResponse
      */
     public function getImportRedirect(): Redirector|RedirectResponse
     {
@@ -64,7 +61,7 @@ trait ImportsData
 
         $overwrite_duplicates = ! empty($request->input('overwrite_duplicates', false));
 
-        /* @var IsImporter $importer */
+        /* @var Importer $importer */
         $importer = ImportsRepository::getImporter(
             $model,
             $overwrite_duplicates,
@@ -95,10 +92,10 @@ trait ImportsData
         $this->flashSuccessMessage();
 
         $import_result = [
-            'num_imported'   => $importer->count(),
+            'num_imported' => $importer->count(),
             'num_duplicates' => $importer->numDuplicates(),
-            'duplicates'     => $importer->duplicates(),
-            'overwrite'      => $overwrite_duplicates,
+            'duplicates' => $importer->duplicates(),
+            'overwrite' => $overwrite_duplicates,
         ];
 
         return $redirect->with('import_result', $import_result);

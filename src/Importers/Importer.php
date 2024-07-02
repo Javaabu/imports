@@ -2,18 +2,18 @@
 
 namespace Javaabu\Imports\Importers;
 
-use InvalidArgumentException;
-use Javaabu\Imports\Exceptions\DownloadableImportValidationException;
-use Javaabu\Imports\Exceptions\ImportValidationException;
-use Javaabu\Imports\Jobs\ImportData;
-use Illuminate\Support\Collection;
-use Javaabu\Imports\Exports\ErrorsExport;
-use Javaabu\Imports\Exports\ImportTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use InvalidArgumentException;
 use Javaabu\Auth\User;
+use Javaabu\Imports\Exceptions\DownloadableImportValidationException;
+use Javaabu\Imports\Exceptions\ImportValidationException;
+use Javaabu\Imports\Exports\ErrorsExport;
+use Javaabu\Imports\Exports\ImportTemplate;
 use Javaabu\Imports\ImportsRepository;
+use Javaabu\Imports\Jobs\ImportData;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -107,11 +107,11 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Constructor
      *
-     * @param bool $overwrite_duplicates
-     * @param null $error_handler
-     * @param Notifiable|null $notifiable
-     * @param null $importable
-     * @param array $meta
+     * @param  bool  $overwrite_duplicates
+     * @param  null  $error_handler
+     * @param  Notifiable|null  $notifiable
+     * @param  null  $importable
+     * @param  array  $meta
      */
     public function __construct(
         $overwrite_duplicates = false,
@@ -132,55 +132,41 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get dummy data for the import template
-     *
-     * @return array
      */
     abstract public function dummyData(): array;
 
     /**
      * Get headings the import template
-     *
-     * @return array
      */
     abstract public function headings(): array;
 
     /**
      * Get the validation rules for the
      * row
-     *
-     * @param array $row
-     * @return array
      */
     abstract public function rowValidationRules(array $row): array;
 
     /**
      * Get the existing model for the given row
-     *
-     * @param array $row
-     * @return Model
      */
     abstract public function getExistingModel(array $row): ?Model;
 
     /**
      * Save the model for the given row
-     *
-     * @param array $row
-     * @param Model|null $existing_model
-     * @return Model
      */
-    abstract public function saveRow(array $row, Model $existing_model = null): Model;
+    abstract public function saveRow(array $row, ?Model $existing_model = null): Model;
 
     /**
      * Whether the current user can import using
      * this importer
      *
-     * @param ?User $user
-     * @return bool
+     * @param  ?User  $user
      */
     public static function canImport(?User $user = null): bool
     {
         if ($user) {
             $model_class = ImportsRepository::getModelClass(static::class);
+
             return $user->can('import', $model_class);
         }
 
@@ -210,8 +196,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Set whether to not queue
      *
-     * @param bool $non_queued
-     * @return Importer
+     * @param  bool  $non_queued
      */
     public function setNonQueued($non_queued = true): Importer
     {
@@ -223,8 +208,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Set the meta data
      *
-     * @param array $meta
-     * @return Importer
+     * @param  array  $meta
      */
     public function setMeta($meta = null): Importer
     {
@@ -236,8 +220,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Set whether to overwrite duplicates
      *
-     * @param bool $overwrite
-     * @return Importer
+     * @param  bool  $overwrite
      */
     public function setOverwriteDuplicates($overwrite = true): Importer
     {
@@ -249,8 +232,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Set whether to download errors
      *
-     * @param bool $download
-     * @return Importer
+     * @param  bool  $download
      */
     public function setShouldDownloadErrors($download = true): Importer
     {
@@ -285,8 +267,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the queue name
-     *
-     * @return string
      */
     public function getQueueName(): ?string
     {
@@ -295,8 +275,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the queue connection
-     *
-     * @return string
      */
     public function getQueueConnection(): ?string
     {
@@ -304,8 +282,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     }
 
     /**
-     * @param string $queue_name
-     * @return Importer
+     * @param  string  $queue_name
      */
     public function setQueueName($queue_name): Importer
     {
@@ -315,8 +292,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     }
 
     /**
-     * @param string $queue_connection
-     * @return Importer
+     * @param  string  $queue_connection
      */
     public function setQueueConnection($queue_connection): Importer
     {
@@ -327,9 +303,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Set the queue threshold
-     *
-     * @param int $queue_threshold
-     * @return Importer
      */
     public function setQueueThreshold(int $queue_threshold): Importer
     {
@@ -340,26 +313,17 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the queue threshold
-     *
-     * @return int
      */
     public function getQueueThreshold(): int
     {
         return $this->queue_threshold;
     }
 
-    /**
-     * @return string
-     */
     public function getFileName(): ?string
     {
         return $this->file_name;
     }
 
-    /**
-     * @param string $file_name
-     * @return Importer
-     */
     public function setFileName(string $file_name): Importer
     {
         $this->file_name = $file_name;
@@ -369,8 +333,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Check if should queue the import
-     *
-     * @return bool
      */
     public function shouldQueue(): bool
     {
@@ -381,7 +343,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Set the error handler
      *
-     * @param string $handler download|display
+     * @param  string  $handler  download|display
      */
     public function setErrorHandler($handler)
     {
@@ -414,7 +376,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     {
         $class_name = class_basename(get_class($this));
 
-        return $class_name . 'Template.xlsx';
+        return $class_name.'Template.xlsx';
     }
 
     /**
@@ -425,7 +387,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
     public function downloadImportTemplate()
     {
         return $this->importTemplate()
-                    ->download($this->importTemplateFileName());
+            ->download($this->importTemplateFileName());
     }
 
     /**
@@ -437,14 +399,12 @@ abstract class Importer implements ToCollection, WithHeadingRow
     {
         $class_name = class_basename(get_class($this));
 
-        return $class_name . 'Errors.xlsx';
+        return $class_name.'Errors.xlsx';
     }
 
     /**
      * Get the errors export template
      *
-     * @param array $valid_rows
-     * @param array $invalid_rows
      * @return Exportable
      */
     public function errorsExport(array $valid_rows, array $invalid_rows)
@@ -456,11 +416,8 @@ abstract class Importer implements ToCollection, WithHeadingRow
         );
     }
 
-
     /**
      * Validate and save the collection
-     *
-     * @param Collection $collection
      */
     public function collection(Collection $collection)
     {
@@ -477,8 +434,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Dispatch import job
-     *
-     * @param Collection $data
      */
     protected function dispatchImportJob(Collection $data)
     {
@@ -503,9 +458,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the validator for the given row
-     *
-     * @param Collection $row
-     * @return array
      */
     protected function normalizeRow(Collection $row): array
     {
@@ -514,9 +466,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the validator for the given row
-     *
-     * @param array $row
-     * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function rowValidator(array $row): \Illuminate\Contracts\Validation\Validator
     {
@@ -531,9 +480,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Get the validation messages for the
      * row
-     *
-     * @param array $row
-     * @return array
      */
     public function rowValidationMessages(array $row): array
     {
@@ -543,9 +489,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Get the validation custom attributes
      * for the row
-     *
-     * @param array $row
-     * @return array
      */
     public function rowValidationCustomAttributes(array $row): array
     {
@@ -554,8 +497,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get which fields not to trim
-     *
-     * @return array
      */
     public function getTrimExcept(): array
     {
@@ -564,8 +505,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the model class used for this importer
-     *
-     * @return string
      */
     public function getModelClass(): string
     {
@@ -574,9 +513,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Check if should trim column
-     *
-     * @param $field
-     * @return bool
      */
     public function shouldTrim($field): bool
     {
@@ -585,9 +521,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Trim the input strings
-     *
-     * @param array $row
-     * @return array
      */
     public function trimStrings(array $row): array
     {
@@ -602,8 +535,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the row count
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -612,8 +543,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the duplicates
-     *
-     * @return array
      */
     public function duplicates(): array
     {
@@ -622,8 +551,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Get the number of duplicates
-     *
-     * @return int
      */
     public function numDuplicates(): int
     {
@@ -633,8 +560,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
     /**
      * Validate the data for the give collection
      * and keep track of the errors
-     *
-     * @param $rows
      */
     protected function validate(Collection $rows)
     {
@@ -681,8 +606,6 @@ abstract class Importer implements ToCollection, WithHeadingRow
 
     /**
      * Save the collection data to the db
-     *
-     * @param $rows
      */
     public function save(Collection $rows)
     {

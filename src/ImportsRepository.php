@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 abstract class ImportsRepository
 {
-
     /**
      * Get importables list.
      * Optionally filter only models that the
@@ -48,7 +47,7 @@ abstract class ImportsRepository
     /**
      * Get the instantiated importer from the model class
      *
-     * @param Notifiable|null $notifiable
+     * @param  Notifiable|null  $notifiable
      * @return Importer
      */
     public static function getImporter(
@@ -56,7 +55,7 @@ abstract class ImportsRepository
         bool $overwrite_duplicates = false,
         $error_handler = null,
         $notifiable = null,
-        array $meta = null
+        ?array $meta = null
     ) {
         $importable_class = Imports::getImportables()[$model_slug];
 
@@ -66,7 +65,6 @@ abstract class ImportsRepository
     /**
      * Get the model class from the importer
      *
-     * @param $importer_class
      * @return string
      */
     public static function getModelClass($importer_class)
@@ -81,5 +79,4 @@ abstract class ImportsRepository
 
         return null;
     }
-
 }

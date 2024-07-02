@@ -7,7 +7,6 @@ use Javaabu\Imports\Http\Controllers\ImportsController;
 
 class Imports
 {
-
     protected static array $importables = [];
 
     public static function registerImports(array $importables): void

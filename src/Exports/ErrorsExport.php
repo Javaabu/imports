@@ -2,9 +2,9 @@
 
 namespace Javaabu\Imports\Exports;
 
-use Maatwebsite\Excel\Concerns\Exportable;
-use App\Imports\Exports\Sheets\ValidRowsSheet;
 use App\Imports\Exports\Sheets\InvalidRowsSheet;
+use App\Imports\Exports\Sheets\ValidRowsSheet;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class ErrorsExport implements WithMultipleSheets
@@ -28,10 +28,6 @@ class ErrorsExport implements WithMultipleSheets
 
     /**
      * Errors Export constructor.
-     *
-     * @param array $valid_rows
-     * @param array $invalid_rows
-     * @param array $headings
      */
     public function __construct(array $valid_rows, array $invalid_rows, array $headings)
     {
@@ -40,9 +36,6 @@ class ErrorsExport implements WithMultipleSheets
         $this->headings = $headings;
     }
 
-    /**
-     * @return array
-     */
     public function sheets(): array
     {
         $sheets = [];

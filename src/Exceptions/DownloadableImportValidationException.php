@@ -3,6 +3,7 @@
  * Custom Exception
  *
  * @author Arushad Ahmed (@dash8x)
+ *
  * @author_uri http://arushad.org
  */
 
@@ -25,10 +26,6 @@ class DownloadableImportValidationException extends ImportValidationException
 
     /**
      * Constructor
-     *
-     * @param ErrorsExport $exportable
-     * @param $export_file_name
-     * @param array $errors
      */
     public function __construct(ErrorsExport $exportable, $export_file_name, array $errors)
     {
@@ -68,5 +65,4 @@ class DownloadableImportValidationException extends ImportValidationException
     {
         return $this->getExportable()->download($this->getExportFileName());
     }
-
 }

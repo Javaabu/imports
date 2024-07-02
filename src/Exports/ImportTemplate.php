@@ -2,12 +2,12 @@
 
 namespace Javaabu\Imports\Exports;
 
-use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ImportTemplate implements FromArray, WithHeadings, ShouldAutoSize
+class ImportTemplate implements FromArray, ShouldAutoSize, WithHeadings
 {
     use Exportable;
 
@@ -23,9 +23,6 @@ class ImportTemplate implements FromArray, WithHeadings, ShouldAutoSize
 
     /**
      * Create a new vendors export instance.
-     *
-     * @param array $headings
-     * @param array $dummy_data
      */
     public function __construct(array $headings, array $dummy_data)
     {
@@ -33,18 +30,11 @@ class ImportTemplate implements FromArray, WithHeadings, ShouldAutoSize
         $this->dummy_data = $dummy_data;
     }
 
-
-    /**
-     * @return array
-     */
     public function array(): array
     {
         return $this->dummy_data;
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return $this->headings;

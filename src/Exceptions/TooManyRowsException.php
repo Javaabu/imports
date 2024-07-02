@@ -3,6 +3,7 @@
  * Custom Exception
  *
  * @author Arushad Ahmed (@dash8x)
+ *
  * @author_uri http://arushad.org
  */
 
@@ -26,10 +27,9 @@ class TooManyRowsException extends AppException
     /**
      * Constructor
      *
-     * @param int $count
-     * @param string $file_name
-     * @param string $message
-     * @param string $name
+     * @param  string  $file_name
+     * @param  string  $message
+     * @param  string  $name
      */
     public function __construct(int $count, $file_name = '', $message = 'The import file contains too many rows to import in one go. The data would be imported in the background and you would be notified via email once the data is imported.', $name = 'TooManyRows')
     {
@@ -87,5 +87,4 @@ class TooManyRowsException extends AppException
             'file_name' => $this->getFileName(),
         ], $this->getStatusCode());
     }
-
 }

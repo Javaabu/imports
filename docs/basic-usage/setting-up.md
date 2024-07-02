@@ -1,5 +1,6 @@
 ---
-title: How to use the package
+title: Setting Up
+sidebar_position: 1.4
 ---
 
 ## Create Controller

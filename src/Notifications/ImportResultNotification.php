@@ -2,10 +2,10 @@
 
 namespace Javaabu\Imports\Notifications;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\HtmlString;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class ImportResultNotification extends Notification
 {
@@ -32,10 +32,6 @@ class ImportResultNotification extends Notification
 
     /**
      * Create a notification instance.
-     *
-     * @param array $result
-     * @param string $file_name
-     * @param string $model_type
      */
     public function __construct(array $result, string $file_name, string $model_type)
     {

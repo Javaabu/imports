@@ -2,9 +2,9 @@
 
 namespace Javaabu\Imports\Notifications;
 
-use Illuminate\Support\Str;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
 
 class ImportFailedNotification extends Notification
 {
@@ -31,10 +31,6 @@ class ImportFailedNotification extends Notification
 
     /**
      * Create a notification instance.
-     *
-     * @param string $message
-     * @param string $file_name
-     * @param string $model_type
      */
     public function __construct(?string $message, string $file_name, string $model_type)
     {

@@ -2,13 +2,13 @@
 
 namespace App\Imports\Exports\Sheets;
 
-use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class InvalidRowsSheet implements WithHeadings, ShouldAutoSize, FromArray, WithTitle
+class InvalidRowsSheet implements FromArray, ShouldAutoSize, WithHeadings, WithTitle
 {
     use Exportable;
 
@@ -24,9 +24,6 @@ class InvalidRowsSheet implements WithHeadings, ShouldAutoSize, FromArray, WithT
 
     /**
      * Create a new vendors export instance.
-     *
-     * @param array $headings
-     * @param array $data
      */
     public function __construct(array $headings, array $data)
     {
@@ -34,26 +31,16 @@ class InvalidRowsSheet implements WithHeadings, ShouldAutoSize, FromArray, WithT
         $this->data = $data;
     }
 
-
-    /**
-     * @return array
-     */
     public function array(): array
     {
         return [$this->data];
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return $this->headings;
     }
 
-    /**
-     * @return string
-     */
     public function title(): string
     {
         return 'Invalid Rows';

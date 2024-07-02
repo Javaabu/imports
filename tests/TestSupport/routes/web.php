@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
 use Javaabu\Imports\Tests\TestSupport\Controllers\ImportsController;
 
