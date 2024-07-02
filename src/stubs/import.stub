@@ -54,6 +54,6 @@ class {{ ImporterClassName }} extends Importer
 
     public static function canImport(?User $user = null): bool
     {
-        return auth()->user()->can('create', {{ ModelName }}::class);
+        return auth()->user()->can('import', {{ ModelName }}::class);
     }
 }
