@@ -11,24 +11,12 @@ class ErrorsExport implements WithMultipleSheets
 {
     use Exportable;
 
-    /**
-     * @var array
-     */
-    protected $headings;
+    protected ?array $headings;
 
-    /**
-     * @var array
-     */
-    protected $invalid_rows;
+    protected ?array $invalid_rows;
 
-    /**
-     * @var array
-     */
-    protected $valid_rows;
+    protected ?array $valid_rows;
 
-    /**
-     * Errors Export constructor.
-     */
     public function __construct(array $valid_rows, array $invalid_rows, array $headings)
     {
         $this->valid_rows = $valid_rows;

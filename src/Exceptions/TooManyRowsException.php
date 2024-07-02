@@ -9,30 +9,23 @@
 
 namespace Javaabu\Imports\Exceptions;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Javaabu\Helpers\Exceptions\AppException;
 
 class TooManyRowsException extends AppException
 {
-    /**
-     * @var int
-     */
-    protected $count;
+    protected int $count;
 
-    /**
-     * @var string
-     */
-    protected $file_name;
+    protected ?string $file_name;
 
-    /**
-     * Constructor
-     *
-     * @param  string  $file_name
-     * @param  string  $message
-     * @param  string  $name
-     */
-    public function __construct(int $count, $file_name = '', $message = 'The import file contains too many rows to import in one go. The data would be imported in the background and you would be notified via email once the data is imported.', $name = 'TooManyRows')
-    {
+    public function __construct(
+        int $count,
+        ?string $file_name = '',
+        ?string $message = 'The import file contains too many rows to import in one go. The data would be imported in the background and you would be notified via email once the data is imported.',
+        ?string $name = 'TooManyRows'
+    ) {
         parent::__construct(422, $name, $message);
 
         $this->count = $count;
@@ -41,30 +34,24 @@ class TooManyRowsException extends AppException
 
     /**
      * Get the count
-     *
-     * @return int
      */
-    public function getCount()
+    public function getCount(): int
     {
         return $this->count;
     }
 
     /**
      * Get the filename
-     *
-     * @return int
      */
-    public function getFileName()
+    public function getFileName(): ?string
     {
         return $this->file_name;
     }
 
     /**
      * Send json response
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    protected function sendHttpResponse()
+    protected function sendHttpResponse(): Response|RedirectResponse
     {
         return back()->with([
             'row_count' => $this->getCount(),
@@ -75,10 +62,8 @@ class TooManyRowsException extends AppException
 
     /**
      * Send json response
-     *
-     * @return JsonResponse
      */
-    protected function sendJsonResponse()
+    protected function sendJsonResponse(): JsonResponse
     {
         return response()->json([
             'message' => $this->getMessage(),

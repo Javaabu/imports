@@ -9,20 +9,15 @@
 
 namespace Javaabu\Imports\Exceptions;
 
+use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Javaabu\Imports\Exports\ErrorsExport;
-use Maatwebsite\Excel\Concerns\Exportable;
 
 class DownloadableImportValidationException extends ImportValidationException
 {
-    /**
-     * @var Exportable
-     */
-    protected $exportable;
+    protected ErrorsExport $exportable;
 
-    /**
-     * @var string
-     */
-    protected $export_file_name;
+    protected string $export_file_name;
 
     /**
      * Constructor
@@ -38,30 +33,24 @@ class DownloadableImportValidationException extends ImportValidationException
 
     /**
      * Get the exportable file name
-     *
-     * @return string
      */
-    public function getExportFileName()
+    public function getExportFileName(): string
     {
         return $this->export_file_name;
     }
 
     /**
      * Get the exportable
-     *
-     * @return Exportable
      */
-    public function getExportable()
+    public function getExportable(): ErrorsExport
     {
         return $this->exportable;
     }
 
     /**
      * Send json response
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    protected function sendHttpResponse()
+    protected function sendHttpResponse(): Response|RedirectResponse
     {
         return $this->getExportable()->download($this->getExportFileName());
     }

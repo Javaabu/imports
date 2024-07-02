@@ -12,19 +12,10 @@ class InvalidRowsSheet implements FromArray, ShouldAutoSize, WithHeadings, WithT
 {
     use Exportable;
 
-    /**
-     * @var array
-     */
-    protected $headings;
+    protected ?array $headings;
 
-    /**
-     * @var array
-     */
-    protected $data;
+    protected ?array $data;
 
-    /**
-     * Create a new vendors export instance.
-     */
     public function __construct(array $headings, array $data)
     {
         $this->headings = $headings;

@@ -11,19 +11,10 @@ class ImportTemplate implements FromArray, ShouldAutoSize, WithHeadings
 {
     use Exportable;
 
-    /**
-     * @var array
-     */
-    protected $headings;
+    protected ?array $headings;
 
-    /**
-     * @var array
-     */
-    protected $dummy_data;
+    protected ?array $dummy_data;
 
-    /**
-     * Create a new vendors export instance.
-     */
     public function __construct(array $headings, array $dummy_data)
     {
         $this->headings = $headings;

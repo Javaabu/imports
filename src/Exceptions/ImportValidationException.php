@@ -9,23 +9,16 @@
 
 namespace Javaabu\Imports\Exceptions;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Javaabu\Helpers\Exceptions\AppException;
 
 class ImportValidationException extends AppException
 {
-    /**
-     * @var array
-     */
-    protected $errors;
+    protected ?array $errors;
 
-    /**
-     * Constructor
-     *
-     * @param  string  $message
-     * @param  string  $name
-     */
-    public function __construct(array $errors, $message = 'Import data is invalid', $name = 'ImportValidationErrors')
+    public function __construct(array $errors, ?string $message = 'Import data is invalid', ?string $name = 'ImportValidationErrors')
     {
         parent::__construct(422, $name, $message);
 
@@ -34,30 +27,24 @@ class ImportValidationException extends AppException
 
     /**
      * Get the errors
-     *
-     * @return array
      */
-    public function getErrors()
+    public function getErrors(): ?array
     {
         return $this->errors;
     }
 
     /**
      * Send json response
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    protected function sendHttpResponse()
+    protected function sendHttpResponse(): Response|RedirectResponse
     {
         return back()->withErrors($this->getErrors(), 'import_errors');
     }
 
     /**
      * Send json response
-     *
-     * @return JsonResponse
      */
-    protected function sendJsonResponse()
+    protected function sendJsonResponse(): JsonResponse
     {
         return response()->json([
             'message' => $this->getMessage(),

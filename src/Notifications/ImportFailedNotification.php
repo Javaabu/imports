@@ -8,30 +8,10 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class ImportFailedNotification extends Notification
 {
-    /**
-     * The validation errors
-     *
-     * @var string
-     */
-    public $message;
+    public string $message; // The validation errors
+    public string $file_name;
+    public string $model_type;
 
-    /**
-     * The file name
-     *
-     * @var string
-     */
-    public $file_name;
-
-    /**
-     * The model type
-     *
-     * @var string
-     */
-    public $model_type;
-
-    /**
-     * Create a notification instance.
-     */
     public function __construct(?string $message, string $file_name, string $model_type)
     {
         $this->message = $message;
@@ -41,22 +21,16 @@ class ImportFailedNotification extends Notification
 
     /**
      * Get the notification's channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array|string
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array|string
     {
         return ['mail'];
     }
 
     /**
      * Build the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): MailMessage
     {
         $model_type = Str::plural(slug_to_title($this->model_type));
 
