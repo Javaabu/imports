@@ -32,7 +32,7 @@
             <x-forms::file
                 name="import_file"
                 label="{{ __('Import File') }}"
-                accept="{{ \Javaabu\Helpers\Media\AllowedMimeTypes::getAllowedMimeTypesString('spreadsheet') }}"
+                accept="{{ \Javaabu\Helpers\Media\AllowedMimeTypes::getAllowedMimeTypesString('excel') }}"
                 />
         </div>
 
