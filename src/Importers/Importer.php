@@ -5,7 +5,6 @@ namespace Javaabu\Imports\Importers;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
-use Illuminate\Foundation\Auth\User;
 use Javaabu\Imports\Jobs\ImportData;
 use Javaabu\Imports\ImportsRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +13,7 @@ use Javaabu\Imports\Exports\ErrorsExport;
 use Javaabu\Imports\Exports\ImportTemplate;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 use Javaabu\Imports\Exceptions\TooManyRowsException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Javaabu\Imports\Exceptions\ImportValidationException;
@@ -104,7 +104,7 @@ abstract class Importer implements ToCollection, WithHeadingRow
      * Whether the current user can import using
      * this importer
      */
-    public static function canImport(?User $user = null): bool
+    public static function canImport(?Authorizable $user = null): bool
     {
         if ($user) {
             $model_class = ImportsRepository::getModelClass(static::class);
