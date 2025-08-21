@@ -17,29 +17,4 @@ class User extends Authenticatable
     {
         return new UserFactory();
     }
-
-    public function phoneVerificationRedirectUrl(): string
-    {
-        return '';
-    }
-
-    public function phoneVerificationUrl(): string
-    {
-        return '';
-    }
-
-    public function findMobileGrantUser($oauth_user, $provider): ?HasMobileNumber
-    {
-        $number = $http_response_header->getNumber();
-        $user = User::whereHas('phone', function ($query) use ($number) {
-            $query->where('number', $number);
-        })->first();
-
-        return $user;
-    }
-
-    public function redirectToMobileVerificationUrl(): RedirectResponse
-    {
-        return to_route('mobile-verifications.login.create');
-    }
 }
