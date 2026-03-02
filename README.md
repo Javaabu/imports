@@ -23,6 +23,7 @@ Install the package via composer:
 composer require javaabu/imports
 ```
 
+
 Create your controller and use the `ImportsData` trait
 ```php
 <?php
