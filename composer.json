@@ -46,17 +46,6 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Javaabu/Laravel-Excel.git",
-            "canonical": false
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/javaabu/laravel-settings.git"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
