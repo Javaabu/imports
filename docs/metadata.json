@@ -1,5 +1,5 @@
 {
     "name": "Imports",
-    "description": "Streamline excel data import to your application",
+    "description": "Spreadsheet imports for Laravel: preview and map columns, model importers, streaming reads, background jobs with failure reports and an imports UI with live progress",
     "version": "2"
 }

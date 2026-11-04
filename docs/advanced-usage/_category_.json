@@ -1,0 +1,11 @@
+{
+    "position": 1.31,
+    "label": "Advanced Usage",
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "slug": "/imports/_categories/advanced-usage",
+        "description": "Performance, live progress, permissions, overrides and every option."
+    }
+}

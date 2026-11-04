@@ -21,3 +21,4 @@ All notable changes will be documented in this file.
 - `Imports::register('products', ProductsImporter::class)` lets the imports page run an importer by name (`registerImports()` still works).
 - Imports pages in Blade (javaabu/forms v2 components) and Inertia React (TypeScript, @javaabu/forms and @javaabu/onu, shipped through javaabu/manifest), chosen with `imports.views`: upload with template links, the mapping step with sample values, automatic matches and a preview of the first rows, and live progress, counts and failed rows. Components `ColumnMapping`, `PreviewTable`, `ImportProgress`, `ImportCounts`, `ImportActions`, `FailuresTable` and `useImportProgress` can be imported as `@javaabu/imports`.
 - English and Dhivehi translations for every string; pages and XLSX reports are right-to-left in Dhivehi.
+- Docs for people and agents in `docs/`, `llms.txt`, a Laravel Boost guideline and skill, and `AGENTS.md`.

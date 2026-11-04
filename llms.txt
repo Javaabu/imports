@@ -1,0 +1,42 @@
+# javaabu/imports
+
+> Spreadsheet imports for Laravel. Extend ModelImporter (or Importer) and describe columns with Column::make(): labels, rules, required, aliases, defaults, transforms, types (booleans, numbers, dates, enums by label) and lookups of related models by name or code. preview() shows headings, samples, the automatic mapping and the first rows' errors before anything is written; import() runs now, queue() on the queue with an Import model, progress, cancellation, failure reports and notifications. Files are streamed with OpenSpout and saved in chunks with flat memory. Route::imports() adds an imports page (upload, map, preview, run) and JSON API in Blade or Inertia React, with live progress over Reverb or polling, and a policy and permissions through javaabu/permissions.
+
+Paths are relative to this file. In a project, that's vendor/javaabu/imports/.
+
+## Rules
+
+- Write importers as classes extending `Javaabu\Imports\ModelImporter` with `modelClass()` (or `Javaabu\Imports\Importer` with `columns()` and `persist()` for rows that aren't models). Don't use maatwebsite/excel (`ToCollection`, `WithHeadingRow`, `Excel::import()`): v2 doesn't use it.
+- Describe columns in `columns()` with `Javaabu\Imports\Columns\Column::make('attribute')`. Use `lookup(Brand::class, ['name', 'code'])` for foreign keys, not `exists:` rules or queries in hooks. Use `boolean()`, `number()`, `date()`, `enum()` rather than parsing values yourself.
+- Existing records are found by `uniqueBy()` (default: the first unique index) and handled by `duplicates('skip'|'update'|'fail')`. Don't look them up per row yourself.
+- Fail a row from a hook with `throw RowFailedException::withMessage(__('…'))`; never stop the whole import for one row.
+- Call `preview()` before writing anything when a person chooses the file; `import()` runs in the request, so use `queue($file, $user)` for anything over a few thousand rows.
+- Keep an importer's constructor arguments small and serializable: queued imports serialize the importer. Add `fromRequest(Request $request)` to build it on the imports page.
+- Register importers for the imports page with `Javaabu\Imports\Imports::register('products', ProductsImporter::class)` in a service provider's `boot()`. Who may run one is its `authorize($user)` (default: `create` on the model).
+- Register the routes yourself with `Route::imports([...])` inside the app's route group; pass `guard`, `prefix` and `name` for other guards.
+- Permissions are `view_imports`, `view_others_imports`, `delete_imports`, `delete_others_imports`. Run `php artisan permissions:sync`. Override the policy with `config('permissions.policies')` or `Gate::policy()`.
+- Store uploads on a private disk (`IMPORTS_DISK`). Schedule `imports:prune` daily.
+- Column labels go through `__()`; add Dhivehi to `lang/dv.json`. Use Thaana in tests of user-facing imports.
+
+## Docs
+
+- [Introduction](docs/intro.md): what the package does
+- [Requirements](docs/requirements.md): PHP, Laravel, extensions and optional packages
+- [Installation & Setup](docs/installation-and-setup.md): installing, migrating, storage, permissions, routes, pruning, publishing
+- [Upgrading from v1](docs/upgrading.md): why maatwebsite/excel was dropped, mapping v1 importer methods to v2
+- [Writing importers](docs/basic-usage/writing-importers.md): default columns, Column, types, lookups, existing records, hooks, plain importers
+- [Importing files](docs/basic-usage/importing-files.md): preview(), mapping, import(), results, failure reports, dry runs, templates, testing
+- [Queued imports](docs/basic-usage/queued-imports.md): queue(), drafts, the Import model, the job, notifications, events, pruning, testing
+- [Imports page and API](docs/basic-usage/imports-page-and-api.md): Route::imports(), Imports::register(), the flow, the JSON API, pages and components
+- [Performance](docs/advanced-usage/performance.md): the 200k-row benchmark, what makes it fast, tips
+- [Permissions and policies](docs/advanced-usage/permissions-and-policies.md): permissions, ImportPolicy, importer authorization, multiple guards
+- [Live progress](docs/advanced-usage/live-progress.md): Reverb, channels, events, listening, polling
+- [Overriding controllers and views](docs/advanced-usage/overriding-controllers-and-views.md): setting up the pages, props, custom views, pages and controllers
+- [Dhivehi and translations](docs/advanced-usage/translations.md): translated strings, Dhivehi headings and values, RTL, strings to review
+- [Configuration](docs/advanced-usage/configuration.md): every option in config/imports.php
+- [API reference](docs/advanced-usage/api-reference.md): every public class and method
+- [AI assistants](docs/ai-assistants.md): Laravel Boost, and using these docs from other assistants
+- [Questions and Security](docs/questions-and-security.md): where to get help
+- [Changelog](docs/changelog.md): where changes are listed
+- [About Us](docs/about-us.md): Javaabu
+- [Contributing to the docs](docs/contributing-to-docs.md): how the docs are built
