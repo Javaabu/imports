@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Number;
 use Javaabu\Imports\Enums\Duplicates;
 use Javaabu\Imports\Enums\Formats;
 use Javaabu\Imports\Enums\ImportStatuses;
@@ -80,6 +81,7 @@ class ImportsController extends Controller
             'available' => $this->availableImporters($request),
             'formats' => $this->formats(),
             'accept' => implode(',', array_map(fn (string $extension) => ".{$extension}", Formats::extensions())),
+            'max_file_size' => (int) config('imports.max_file_size', 51200),
             'sees_others' => $sees_others,
             'filters' => [
                 'status' => $status?->value,
@@ -177,10 +179,15 @@ class ImportsController extends Controller
     }
 
     /**
-     * Queue the import, with the mapping and options sent (or saved)
+     * Queue the import, with the mapping and options sent (or saved). A form's Preview
+     * button sends `intent=preview` here, which saves and previews instead.
      */
     public function run(ImportOptionsRequest $request, string $import): RedirectResponse|JsonResponse
     {
+        if ($request->input('intent') === 'preview') {
+            return $this->preview($request, $import);
+        }
+
         $import = $this->findImport($request, $import);
 
         $this->authorizeAbility($request, 'update', $import);
@@ -462,6 +469,7 @@ class ImportsController extends Controller
             'dry_run_notice' => __('This was a dry run: nothing was saved.'),
             'error' => __('Error'),
             'file_unavailable' => __('The uploaded file is no longer available.'),
+            'file_help' => __('Excel (XLSX), CSV or OpenDocument (ODS), up to :size.', ['size' => Number::fileSize((int) config('imports.max_file_size', 51200) * 1024)]),
         ];
     }
 

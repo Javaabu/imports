@@ -34,6 +34,35 @@ jobs:
             -   name: Check code style
                 run: vendor/bin/pint --test
 
+    js:
+        runs-on: ubuntu-latest
+
+        name: React pages (typecheck, tests)
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v5
+
+            -   name: Setup pnpm
+                uses: pnpm/action-setup@v4
+
+            -   name: Setup Node
+                uses: actions/setup-node@v5
+                with:
+                    node-version: 22
+                    package-manager-cache: false
+
+            # The default store is inside a node_modules folder, which breaks the declaration
+            # build of @javaabu/forms (installed from git and built on install)
+            -   name: Install dependencies
+                run: pnpm install --frozen-lockfile --store-dir "$RUNNER_TEMP/pnpm-store"
+
+            -   name: Typecheck
+                run: pnpm typecheck
+
+            -   name: Test
+                run: pnpm test
+
     benchmark:
         runs-on: ubuntu-latest
 
