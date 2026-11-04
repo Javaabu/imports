@@ -50,11 +50,11 @@ class TemporaryFile
     }
 
     /**
-     * Stream a local file to a disk
+     * Stream a local file to a disk (the local file is kept)
      *
      * @return int|null the size of the file in bytes
      */
-    public static function moveToDisk(string $local_path, string $path, ?string $disk): ?int
+    public static function copyToDisk(string $local_path, string $path, ?string $disk): ?int
     {
         $size = filesize($local_path) ?: null;
         $stream = fopen($local_path, 'r');

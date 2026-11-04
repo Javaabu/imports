@@ -12,3 +12,7 @@ All notable changes will be documented in this file.
 - Files are streamed with OpenSpout and saved in chunks, one transaction per chunk and a savepoint per row. Invalid rows don't stop an import: they're counted, kept as samples and written to a failure report with their row numbers and errors.
 - `preview()` shows headings, sample values, the automatic (or given) mapping, unmapped required columns and the first rows validated with what would happen to them, without writing anything. `dryRun()` validates a whole file without saving.
 - Templates with headings and examples: `template()` and `downloadTemplate()`.
+- Imports run on the queue and are tracked by an `Import` model (status, the uploaded file, its headings and mapping, counts of created, updated, skipped and failed rows, the first failures, the failure report, the user morph). `upload()` stores a draft to map and preview first; `queue()` starts straight away. `ProcessImport` counts the rows, saves progress after each chunk, stops when cancelled, stores the failure report next to the upload and notifies the user (mail by default) with a signed link to it.
+- Import events: `ImportStarted`, `ImportProgressed`, `ImportCompleted`, `ImportFailed`, `ImportCancelled`, broadcast on private channels when Reverb is installed.
+- `imports:prune` deletes expired drafts and the files of expired imports; `--days` also deletes old records.
+- `imports:make` writes a model importer with the columns worked out from the table. The stub lives in `stubs/` and can be published.

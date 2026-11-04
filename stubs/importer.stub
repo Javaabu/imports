@@ -1,0 +1,25 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ modelNamespace }}\{{ model }};
+use Javaabu\Imports\Columns\Column;
+use Javaabu\Imports\ModelImporter;
+
+class {{ class }} extends ModelImporter
+{
+    public function modelClass(): string
+    {
+        return {{ model }}::class;
+    }
+
+    /**
+     * Without this method, the columns come from the {{ model }} table
+     */
+    public function columns(): array
+    {
+        return [
+{{ columns }}
+        ];
+    }
+}

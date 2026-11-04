@@ -2,7 +2,7 @@
 
 namespace Javaabu\Imports\Tests\Benchmark;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Javaabu\Imports\Tests\TestCase;
 use Javaabu\Imports\Tests\TestSupport\Importers\ProductsImporter;
 use Javaabu\Imports\Tests\TestSupport\Models\Brand;
@@ -14,13 +14,16 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
- * Imports a big file and checks memory stays flat. 200,000 rows by default; set
+ * Imports a big file and checks memory stays flat. DatabaseMigrations, not RefreshDatabase:
+ * the import commits a transaction per chunk, as it does in an app; inside one test-wide
+ * transaction SQLite savepoints slow down as it grows.
+ * 200,000 rows by default; set
  * IMPORTS_BENCHMARK_ROWS to change it. Run with `composer benchmark`.
  */
 #[Group('benchmark')]
 class LargeImportTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     #[Test]
     public function it_imports_hundreds_of_thousands_of_rows_with_flat_memory(): void
