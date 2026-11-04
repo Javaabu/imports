@@ -34,6 +34,28 @@ jobs:
             -   name: Check code style
                 run: vendor/bin/pint --test
 
+    benchmark:
+        runs-on: ubuntu-latest
+
+        name: Benchmark (large import)
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v5
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.4
+                    extensions: curl, mbstring, zip, pdo, sqlite, pdo_sqlite
+                    coverage: none
+
+            -   name: Install dependencies
+                run: composer update --prefer-dist --no-interaction --no-progress
+
+            -   name: Import a large file with flat memory
+                run: vendor/bin/phpunit --group benchmark
+
     tests:
         runs-on: ubuntu-latest
 

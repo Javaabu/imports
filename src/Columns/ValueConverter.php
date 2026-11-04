@@ -7,6 +7,7 @@ use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use Illuminate\Support\Str;
 use Throwable;
+use TypeError;
 
 /**
  * Reads a cell as a column's type
@@ -61,6 +62,42 @@ class ValueConverter
             Column::STRING => $this->toText($value),
             default => $value,
         };
+    }
+
+    /**
+     * Whether a converted value has the column's type, so the type's validation rule would pass
+     */
+    public function hasType(Column $column, mixed $value): bool
+    {
+        if ($value === null || $column->getLookup()) {
+            return true;
+        }
+
+        if ($enum = $column->getEnum()) {
+            return (is_int($value) || is_string($value)) && $this->enumCase($enum, $value) !== null;
+        }
+
+        return match ($column->getType()) {
+            Column::BOOLEAN => is_bool($value),
+            Column::INTEGER => is_int($value),
+            Column::NUMBER => is_int($value) || is_float($value),
+            Column::DATE => is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value) === 1,
+            Column::DATETIME => is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $value) === 1,
+            Column::STRING => is_string($value),
+            default => true,
+        };
+    }
+
+    /**
+     * @param  class-string<BackedEnum>  $enum
+     */
+    protected function enumCase(string $enum, int|string $value): ?BackedEnum
+    {
+        try {
+            return $enum::tryFrom($value);
+        } catch (TypeError) {
+            return null;
+        }
     }
 
     public function toBoolean(mixed $value): mixed

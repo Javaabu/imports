@@ -118,6 +118,18 @@ class Column
     }
 
     /**
+     * The label in another locale, when it's a translation key; null for closures
+     */
+    public function getLabelIn(string $locale): ?string
+    {
+        if ($this->label instanceof Closure) {
+            return null;
+        }
+
+        return (string) __($this->label ?? Str::headline($this->baseName()), [], $locale);
+    }
+
+    /**
      * Help text shown next to the column in the mapping step
      */
     public function description(?string $description): static
@@ -190,19 +202,31 @@ class Column
     }
 
     /**
-     * The full rule list: required or nullable, the type's rules, then the column's own
+     * The full rule list: required or nullable, the type's rule, then the column's own
      *
      * @return array<int, mixed>
      */
     public function getRules(): array
     {
-        $rules = [$this->isRequired() ? 'required' : 'nullable'];
+        return [$this->isRequired() ? 'required' : 'nullable', ...$this->typeRules(), ...$this->rules];
+    }
 
+    /**
+     * The rule the column's type implies: boolean, integer, numeric, date, string or the enum
+     *
+     * @return array<int, mixed>
+     */
+    public function typeRules(): array
+    {
         if ($this->lookup) {
-            return [...$rules, ...$this->rules];
+            return [];
         }
 
-        $type_rules = match ($this->type) {
+        if ($this->enum) {
+            return [new Enum($this->enum)];
+        }
+
+        return match ($this->type) {
             self::BOOLEAN => ['boolean'],
             self::INTEGER => ['integer'],
             self::NUMBER => ['numeric'],
@@ -210,12 +234,16 @@ class Column
             self::STRING => ['string'],
             default => [],
         };
+    }
 
-        if ($this->enum) {
-            $type_rules[] = new Enum($this->enum);
-        }
-
-        return [...$rules, ...$type_rules, ...$this->rules];
+    /**
+     * The column's own rules, without required, nullable or the type's rule
+     *
+     * @return array<int, mixed>
+     */
+    public function ownRules(): array
+    {
+        return $this->rules;
     }
 
     /**

@@ -2,8 +2,11 @@
 
 namespace Javaabu\Imports\Tests;
 
+use DateTimeInterface;
+use Illuminate\Http\UploadedFile;
 use Javaabu\Forms\FormsServiceProvider;
 use Javaabu\Imports\ImportsServiceProvider;
+use Javaabu\Imports\Schema\ModelSchema;
 use Javaabu\Imports\Tests\TestSupport\Models\Admin;
 use Javaabu\Imports\Tests\TestSupport\Models\User;
 use Javaabu\Imports\Tests\TestSupport\Providers\TestServiceProvider;
@@ -11,10 +14,17 @@ use Javaabu\Manifest\ManifestServiceProvider;
 use Javaabu\Permissions\Models\Permission;
 use Javaabu\Permissions\Models\Role;
 use Javaabu\Permissions\PermissionsServiceProvider;
+use OpenSpout\Common\Entity\Cell;
+use OpenSpout\Common\Entity\Cell\DateTimeCell;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Reader\CSV\Reader as CsvReader;
 use OpenSpout\Reader\ODS\Reader as OdsReader;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\XLSX\Reader as XlsxReader;
+use OpenSpout\Writer\CSV\Writer as CsvWriter;
+use OpenSpout\Writer\ODS\Writer as OdsWriter;
+use OpenSpout\Writer\XLSX\Writer as XlsxWriter;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Permission\PermissionServiceProvider;
 use ZipArchive;
@@ -49,6 +59,64 @@ abstract class TestCase extends BaseTestCase
                 'model' => Admin::class,
             ],
         ]);
+    }
+
+    /** @var array<int, string> */
+    protected array $temporary_files = [];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        ModelSchema::flush();
+    }
+
+    protected function tearDown(): void
+    {
+        foreach ($this->temporary_files as $path) {
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
+
+        parent::tearDown();
+    }
+
+    /**
+     * Write rows (the first one being the headings) to a temporary CSV, XLSX or ODS file
+     *
+     * @param  array<int, array<int, mixed>>  $rows
+     */
+    protected function spreadsheet(array $rows, string $extension = 'csv'): string
+    {
+        $path = sys_get_temp_dir() . '/imports-test-' . bin2hex(random_bytes(8)) . '.' . $extension;
+        $this->temporary_files[] = $path;
+
+        $writer = match ($extension) {
+            'csv' => new CsvWriter,
+            'ods' => new OdsWriter,
+            default => new XlsxWriter,
+        };
+
+        $writer->openToFile($path);
+
+        foreach ($rows as $row) {
+            $writer->addRow(new Row(array_map(
+                fn (mixed $value) => $value instanceof DateTimeInterface
+                    ? new DateTimeCell($value, (new Style)->withFormat('yyyy-mm-dd hh:mm'))
+                    : Cell::fromValue($value),
+                $row,
+            )));
+        }
+
+        $writer->close();
+
+        return $path;
+    }
+
+    protected function uploadedFile(string $path, ?string $name = null): UploadedFile
+    {
+        return new UploadedFile($path, $name ?? basename($path), null, null, true);
     }
 
     protected function getPackageProviders($app): array
