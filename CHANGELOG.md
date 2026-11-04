@@ -16,3 +16,6 @@ All notable changes will be documented in this file.
 - Import events: `ImportStarted`, `ImportProgressed`, `ImportCompleted`, `ImportFailed`, `ImportCancelled`, broadcast on private channels when Reverb is installed.
 - `imports:prune` deletes expired drafts and the files of expired imports; `--days` also deletes old records.
 - `imports:make` writes a model importer with the columns worked out from the table. The stub lives in `stubs/` and can be published.
+- `Route::imports()` registers the imports routes (index, upload, template, show, preview, run, report, cancel, destroy, signed report) with the app's prefix, name, guard and middleware. `ImportsController` answers JSON or renders pages, and can be replaced from config, the macro or the container.
+- `ImportPolicy` and the permissions `view_imports`, `view_others_imports`, `delete_imports`, `delete_others_imports`, registered with javaabu/permissions. Only the uploader maps and runs a draft; which importers a user may run is each importer's `authorize()` (for model importers, `create` on the model). Imports belong to any user model through a morph; nothing assumes the `web` guard.
+- `Imports::register('products', ProductsImporter::class)` lets the imports page run an importer by name (`registerImports()` still works).

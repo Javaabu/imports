@@ -239,15 +239,22 @@ class Import extends Model
 
     /**
      * Change the mapping and options of a draft. The mapping can use heading indexes or text.
+     * With $require_complete, a mapping that leaves required columns out isn't saved.
      *
      * @param  array<int|string, string|null>|null  $mapping
      */
-    public function configure(?array $mapping = null, Duplicates|string|null $duplicates = null, ?bool $dry_run = null): static
+    public function configure(?array $mapping = null, Duplicates|string|null $duplicates = null, ?bool $dry_run = null, bool $require_complete = false): static
     {
         $importer = $this->importer();
 
         if ($mapping !== null) {
-            $this->mapping = Mapping::fromArray($mapping, $this->headings ?? [], $importer->resolvedColumns())->toArray();
+            $resolved = Mapping::fromArray($mapping, $this->headings ?? [], $importer->resolvedColumns());
+
+            if ($require_complete) {
+                $resolved->ensureComplete($importer->resolvedColumns());
+            }
+
+            $this->mapping = $resolved->toArray();
         }
 
         if ($duplicates !== null) {

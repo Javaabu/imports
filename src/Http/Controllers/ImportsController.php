@@ -191,7 +191,7 @@ class ImportsController extends Controller
 
         abort_unless($import->importer()->authorize($request->user()), 403);
 
-        $this->configure($request, $import);
+        $this->configure($request, $import, require_complete: true);
 
         $import->run();
 
@@ -276,12 +276,13 @@ class ImportsController extends Controller
             ->with('success', __('Import deleted'));
     }
 
-    protected function configure(ImportOptionsRequest $request, Import $import): void
+    protected function configure(ImportOptionsRequest $request, Import $import, bool $require_complete = false): void
     {
         $import->configure(
             $request->mapping(),
             $request->validated('duplicates'),
             $request->has('dry_run') ? $request->boolean('dry_run') : null,
+            $require_complete,
         );
     }
 
