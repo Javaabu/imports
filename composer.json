@@ -1,12 +1,15 @@
 {
     "name": "javaabu/imports",
-    "description": "Streamline excel data import to your application",
+    "description": "Spreadsheet imports for Laravel: preview and map columns, model importers, streaming reads, background jobs with failure reports and an imports UI with live progress",
     "homepage": "https://github.com/Javaabu/imports",
     "license": "MIT",
     "keywords": [
         "javaabu",
         "laravel",
-        "imports"
+        "imports",
+        "csv",
+        "xlsx",
+        "openspout"
     ],
     "authors": [
         {
@@ -15,16 +18,47 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/forms"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/manifest"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Javaabu/permissions"
+        }
+    ],
     "require": {
-        "php": "^8.2",
-        "illuminate/support": "^10.0 || ^11.0 || ^12.0 || ^13.0",
-        "maatwebsite/excel": "^3.1",
-        "javaabu/forms": "^1.67"
+        "php": "^8.4",
+        "illuminate/console": "^12.0 || ^13.0",
+        "illuminate/database": "^12.0 || ^13.0",
+        "illuminate/filesystem": "^12.0 || ^13.0",
+        "illuminate/http": "^12.0 || ^13.0",
+        "illuminate/notifications": "^12.0 || ^13.0",
+        "illuminate/queue": "^12.0 || ^13.0",
+        "illuminate/routing": "^12.0 || ^13.0",
+        "illuminate/support": "^12.0 || ^13.0",
+        "illuminate/validation": "^12.0 || ^13.0",
+        "javaabu/forms": "^2.0@dev",
+        "javaabu/manifest": "^1.0@dev",
+        "javaabu/permissions": "^3.0@dev",
+        "openspout/openspout": "^5.0"
     },
     "require-dev": {
-        "laravel/pint": "^1.14",
-        "orchestra/testbench": "^8.0 || ^9.16 || ^10.0 || ^11.0",
-        "phpunit/phpunit": "^10.5 || ^11.5.3 || ^12.5.8 || ^13.0.3"
+        "inertiajs/inertia-laravel": "^2.0",
+        "javaabu/boost-javaabu-guidelines": "^1.0",
+        "laravel/pint": "^1.24",
+        "laravel/reverb": "^1.12",
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "phpunit/phpunit": "^11.5.3 || ^12.5.8"
+    },
+    "suggest": {
+        "laravel/reverb": "Broadcasts import progress live; pages poll without it (^1.12)",
+        "inertiajs/inertia-laravel": "Renders the imports pages with Inertia React when imports.views is inertia (^2.0)"
     },
     "autoload": {
         "psr-4": {
@@ -36,15 +70,25 @@
             "Javaabu\\Imports\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "benchmark": "vendor/bin/phpunit --group benchmark",
+        "test-coverage": "vendor/bin/phpunit --coverage-clover build/coverage.xml",
+        "lint": "vendor/bin/pint --test",
+        "format": "vendor/bin/pint"
+    },
     "extra": {
         "branch-alias": {
-            "dev-main": "2.0-dev"
+            "dev-next-gen": "2.x-dev"
         },
         "laravel": {
             "providers": [
                 "Javaabu\\Imports\\ImportsServiceProvider"
             ]
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true

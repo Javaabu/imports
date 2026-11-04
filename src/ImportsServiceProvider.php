@@ -3,35 +3,27 @@
 namespace Javaabu\Imports;
 
 use Illuminate\Support\ServiceProvider;
-use Javaabu\Imports\Commands\CreateImportCommand;
 
 class ImportsServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     */
-    public function boot()
+    public function register(): void
     {
-        // declare publishes
-        //        if ($this->app->runningInConsole()) {
-        //            $this->publishes([
-        //                __DIR__ . '/../config/imports.php' => config_path('imports.php'),
-        //            ], 'imports-config');
-        //        }
-
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'imports');
-
-        $this->commands([
-            CreateImportCommand::class,
-        ]);
+        $this->mergeConfigFrom(__DIR__ . '/../config/imports.php', 'imports');
     }
 
-    /**
-     * Register the application services.
-     */
-    public function register()
+    public function boot(): void
     {
-        // merge package config with user defined config
-        //        $this->mergeConfigFrom(__DIR__ . '/../config/imports.php', 'imports');
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
+
+        if ($this->app->runningInConsole()) {
+            $this->registerPublishing();
+        }
+    }
+
+    protected function registerPublishing(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../config/imports.php' => config_path('imports.php'),
+        ], 'imports-config');
     }
 }

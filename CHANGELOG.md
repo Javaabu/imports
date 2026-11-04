@@ -1,7 +1,8 @@
 # Changelog
 
-All notable changes will be documented in this file
+All notable changes will be documented in this file.
 
-## 1.0.0 - 202X-XX-XX
+## 2.0.0 - Unreleased
 
-- initial release
+- Requires PHP 8.4 and Laravel 12 or 13.
+- Replaced maatwebsite/excel with OpenSpout. See `docs/upgrading.md`.
