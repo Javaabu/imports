@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Javaabu\Imports\Enums\Duplicates;
 use Javaabu\Imports\Enums\Formats;
 use Javaabu\Imports\Enums\ImportStatuses;
@@ -25,6 +26,7 @@ use Javaabu\Imports\Processing\Preview;
 use Javaabu\Imports\Processing\RowFailure;
 use Javaabu\Imports\Support\Broadcasting;
 use Javaabu\Imports\Support\TemporaryFile;
+use OpenSpout\Common\Exception\OpenSpoutException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
@@ -139,6 +141,8 @@ class Import extends Model
 
     /**
      * Store an uploaded file as a draft import, with its headings and a suggested mapping
+     *
+     * @throws ValidationException (on `file`) when the file can't be read or has no headings
      */
     public static function draft(Importer $importer, UploadedFile|string $file, ?Model $user = null, ?string $type = null): static
     {
@@ -146,7 +150,16 @@ class Import extends Model
         $local = $file instanceof UploadedFile ? $file->getRealPath() : $file;
         $format = Formats::resolve(null, $filename);
         $reader = $importer->reader($local, $format);
-        $headings = $reader->headings();
+
+        try {
+            $headings = $reader->headings();
+        } catch (OpenSpoutException) {
+            throw ValidationException::withMessages(['file' => __('The file could not be read. Check that it is a valid :format file.', ['format' => $format->label()])]);
+        }
+
+        if (array_filter($headings, fn (string $heading) => $heading !== '') === []) {
+            throw ValidationException::withMessages(['file' => __('The file has no headings in row :row.', ['row' => $importer->headingRow()])]);
+        }
 
         $import = Imports::newImportModel();
         $import->uuid = (string) Str::uuid();

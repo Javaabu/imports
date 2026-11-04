@@ -129,6 +129,28 @@ class ImportsControllerTest extends TestCase
     }
 
     #[Test]
+    public function unreadable_files_and_files_without_headings_are_rejected(): void
+    {
+        $user = $this->importer();
+
+        $corrupt = sys_get_temp_dir() . '/corrupt-' . uniqid() . '.xlsx';
+        file_put_contents($corrupt, 'not a spreadsheet');
+        $this->temporary_files[] = $corrupt;
+
+        $this->actingAs($user)
+            ->postJson('/imports', ['type' => 'products', 'file' => $this->uploadedFile($corrupt, 'ބަރުދަލު.xlsx')])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['file' => 'The file could not be read. Check that it is a valid Excel (XLSX) file.']);
+
+        $this->actingAs($user)
+            ->postJson('/imports', ['type' => 'products', 'file' => $this->uploadedFile($this->spreadsheet([[''], ['A-1']]), 'empty.csv')])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['file' => 'The file has no headings in row 1.']);
+
+        $this->assertSame(0, Import::query()->count());
+    }
+
+    #[Test]
     public function the_owner_maps_previews_and_runs_a_draft(): void
     {
         Queue::fake();
