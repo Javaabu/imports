@@ -74,7 +74,7 @@
     "Started by": "Started by",
     "Status": "Status",
     "Templates": "Templates",
-    "The file could not be read. Check that it is a valid :format file.": "The file could not be read. Check that it is a :format file.",
+    "The file could not be read. Check that it is a valid :format file.": "The file could not be read. Check that it is a valid :format file.",
     "The file has no column :heading.": "The file has no column :heading.",
     "The file has no headings in row :row.": "The file has no headings in row :row.",
     "The first :count rows, checked with this mapping. Nothing has been saved yet.": "The first :count rows, checked with this mapping. Nothing has been saved yet.",
