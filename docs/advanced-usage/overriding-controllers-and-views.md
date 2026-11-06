@@ -70,7 +70,7 @@ composer require inertiajs/inertia-laravel
 php artisan manifest:check   # prints the install command for anything missing
 ```
 
-They need `@javaabu/forms`, `@javaabu/onu`, `react`, `react-dom` and `@inertiajs/react`. imports declares these for its pages only, so `manifest:check` asks for them once `@inertiajs/react` is in your `package.json` (or with `--scope=pages`); Blade apps aren't asked to install React. Wrap your app in `FormsProvider` (with the Onu and Inertia adapters) as @javaabu/forms describes, so forms submit as Inertia visits. Your persistent layout wraps the pages as it wraps your own.
+They need `@javaabu/forms`, `@javaabu/onu`, `react`, `react-dom` and `@inertiajs/react`. imports declares these for its pages only, so `manifest:check` asks for them once `@inertiajs/react` is in your `package.json` (or with `--scope=pages`); imports doesn't ask Blade apps for them. Wrap your app in `FormsProvider` (with the Onu and Inertia adapters) as @javaabu/forms describes, so forms submit as Inertia visits. Your persistent layout wraps the pages as it wraps your own.
 
 The pages' text comes from the server, translated, in the `strings` prop, so they're in Dhivehi when the app's locale is `dv`. For live progress over Reverb, set up Laravel Echo as `window.Echo`; otherwise the pages poll.
 

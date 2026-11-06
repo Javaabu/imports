@@ -60,10 +60,16 @@ class FrontendAssetsTest extends TestCase
 
         $rows = $this->check();
 
-        // javaabu/forms' Blade assets still need @javaabu/onu, but nothing asks for React
+        // Other packages' Blade assets may need some of these (javaabu/forms' need
+        // @javaabu/onu and react), but imports asks for none of them
         $this->assertNotEmpty($rows);
-        $this->assertEmpty(array_intersect(['@javaabu/forms', 'react', 'react-dom', '@inertiajs/react'], array_keys($rows)));
         $this->assertSame(['laravel-vite-plugin', 'vite'], $this->neededByImports($rows));
+
+        foreach (self::PAGES_ONLY as $name) {
+            $this->assertNotContains('imports', $rows[$name]['needed_by'] ?? []);
+        }
+
+        $this->assertArrayNotHasKey('@inertiajs/react', $rows);
 
         $this->artisan('manifest:check')
             ->expectsOutputToContain('Everything the packages need is installed.')
