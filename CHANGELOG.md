@@ -23,3 +23,4 @@ All notable changes will be documented in this file.
 - English and Dhivehi translations for every string; pages and XLSX reports are right-to-left in Dhivehi.
 - Docs for people and agents in `docs/`, `llms.txt`, a Laravel Boost guideline and skill, and `AGENTS.md`.
 - Uploads that can't be read, or have no headings, are rejected with a validation error on `file`.
+- The npm packages of the Inertia React pages (`@javaabu/forms`, `@javaabu/onu`, React, `@inertiajs/react`) are declared for pages only, so `php artisan manifest:check` doesn't ask Blade apps to install them.

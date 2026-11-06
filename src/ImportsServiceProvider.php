@@ -55,6 +55,8 @@ class ImportsServiceProvider extends ServiceProvider
                 ->script('imports', 'js/imports.ts')
                 ->js()
                 ->pages()
+                // The Blade script imports nothing from npm; only the Inertia pages and
+                // the components apps import through @javaabu/imports need these
                 ->npm([
                     '@javaabu/forms' => 'github:Javaabu/react-forms#next-gen',
                     '@javaabu/onu' => '^0.2.1',
@@ -62,7 +64,7 @@ class ImportsServiceProvider extends ServiceProvider
                     'react' => '^18.3 || ^19.0',
                     'react-dom' => '^18.3 || ^19.0',
                     '@inertiajs/react' => '^2.0 || ^3.0',
-                ]);
+                ], for: 'pages');
         });
     }
 
