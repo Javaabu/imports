@@ -21,15 +21,18 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Javaabu/forms"
+            "url": "https://github.com/Javaabu/forms",
+            "no-api": true
         },
         {
             "type": "vcs",
-            "url": "https://github.com/Javaabu/manifest"
+            "url": "https://github.com/Javaabu/manifest",
+            "no-api": true
         },
         {
             "type": "vcs",
-            "url": "https://github.com/Javaabu/permissions"
+            "url": "https://github.com/Javaabu/permissions",
+            "no-api": true
         }
     ],
     "require": {
