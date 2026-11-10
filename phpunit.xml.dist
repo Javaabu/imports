@@ -10,16 +10,16 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <groups>
+        <exclude>
+            <group>benchmark</group>
+        </exclude>
+    </groups>
     <source>
         <include>
             <directory>src</directory>
         </include>
     </source>
-    <logging>
-        <junit outputFile="build/report.junit.xml"/>
-        <testdoxHtml outputFile="build/coverage"/>
-        <testdoxText outputFile="build/coverage.txt"/>
-    </logging>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>

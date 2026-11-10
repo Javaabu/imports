@@ -3,7 +3,16 @@ title: Requirements
 sidebar_position: 1.1
 ---
 
-This package requires the following:
+- PHP 8.4 or 8.5, with the `zip`, `xmlreader` and `dom` extensions (for XLSX and ODS)
+- Laravel 12 or 13
+- [javaabu/permissions](https://github.com/Javaabu/permissions) v3, [javaabu/forms](https://github.com/Javaabu/forms) v2 and [javaabu/manifest](https://github.com/Javaabu/manifest) v1, installed with this package
+- For the imports pages: Vite with manifest's plugin. The Blade pages need no npm packages of their own. The Inertia React pages, and the components you import from `@javaabu/imports`, need `@javaabu/forms`, `@javaabu/onu`, React 18.3 or 19 and `@inertiajs/react` 2 or 3 in the app. imports declares them for its pages only: `php artisan manifest:check` asks for them in apps that install an Inertia adapter, and imports doesn't ask Blade apps for them (javaabu/forms' Blade assets do need `@javaabu/onu` and `react` themselves).
 
-- Laravel 9.0 or higher
-- PHP 8.1 or higher
+Optional:
+
+| Package | For |
+| --- | --- |
+| `laravel/reverb` ^1.12 | Live progress on the imports page. Without it, the page polls. See [Live progress](advanced-usage/live-progress.md). |
+| `inertiajs/inertia-laravel` ^2.0 | The Inertia React pages (`imports.views` = `inertia`). See [Imports page and API](basic-usage/imports-page-and-api.md). |
+
+A queue worker is needed for [queued imports](basic-usage/queued-imports.md). With the `sync` queue they run during the request.

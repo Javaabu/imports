@@ -2,33 +2,31 @@
 
 namespace Javaabu\Imports\Tests\TestSupport\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Javaabu\Imports\Tests\TestSupport\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Javaabu\Imports\Tests\TestSupport\Models\Admin;
+use Javaabu\Imports\Tests\TestSupport\Models\Brand;
+use Javaabu\Imports\Tests\TestSupport\Models\Category;
+use Javaabu\Imports\Tests\TestSupport\Models\Product;
+use Javaabu\Imports\Tests\TestSupport\Models\User;
 
 class TestServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->loadMigrationsFrom([
-            __DIR__.'/../database',
+            __DIR__ . '/../database',
         ]);
 
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        View::addLocation(__DIR__ . '/../views');
 
         Relation::morphMap([
             'user' => User::class,
+            'admin' => Admin::class,
+            'brand' => Brand::class,
+            'category' => Category::class,
+            'product' => Product::class,
         ]);
-    }
-
-    /**
-     * Register the application services.
-     */
-    public function register()
-    {
-
     }
 }

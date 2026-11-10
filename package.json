@@ -1,0 +1,28 @@
+{
+  "name": "javaabu-imports-dev",
+  "private": true,
+  "description": "Development tooling for the Inertia React pages of javaabu/imports. Apps don't install this; they get the pages through javaabu/manifest.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "pnpm typecheck && pnpm test"
+  },
+  "devDependencies": {
+    "@inertiajs/react": "^2.0.0",
+    "@javaabu/forms": "github:Javaabu/react-forms#next-gen",
+    "@javaabu/onu": "^0.2.1",
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "jsdom": "^26.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@javaabu/forms", "@javaabu/i18n", "esbuild"]
+  },
+  "packageManager": "pnpm@10.28.0"
+}

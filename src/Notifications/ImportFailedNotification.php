@@ -2,44 +2,48 @@
 
 namespace Javaabu\Imports\Notifications;
 
-use Illuminate\Support\Str;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Javaabu\Imports\Models\Import;
 
+/**
+ * Tells the user their import stopped with an error
+ */
 class ImportFailedNotification extends Notification
 {
-    public string $message; // The validation errors
-    public string $file_name;
-    public string $model_type;
-
-    public function __construct(?string $message, string $file_name, string $model_type)
-    {
-        $this->message = $message;
-        $this->file_name = $file_name;
-        $this->model_type = $model_type;
-    }
+    public function __construct(
+        public Import $import,
+    ) {}
 
     /**
-     * Get the notification's channels.
+     * @return array<int, string>
      */
-    public function via(mixed $notifiable): array|string
+    public function via(object $notifiable): array
     {
-        return ['mail'];
+        return config('imports.notifications.channels', ['mail']);
     }
 
-    /**
-     * Build the mail representation of the notification.
-     */
-    public function toMail(mixed $notifiable): MailMessage
+    public function toMail(object $notifiable): MailMessage
     {
-        $model_type = Str::plural(slug_to_title($this->model_type));
-
-        return (new MailMessage())
-            ->subject("$model_type Import Failed!")
-            ->greeting("Hi {$notifiable->name},")
+        return (new MailMessage)
             ->error()
-            ->line("The **$model_type Import** for **'{$this->file_name}'** failed with the following error message.")
-            ->line('')
-            ->line("`{$this->message}`");
+            ->subject(__('Your :name import failed', ['name' => $this->import->name]))
+            ->line(__('Your :name import of :file could not be completed. Rows saved before the error stay saved. Please try again, or contact us if it keeps failing.', [
+                'name' => $this->import->name,
+                'file' => $this->import->filename,
+            ]));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return [
+            'import' => $this->import->uuid,
+            'name' => $this->import->name,
+            'status' => $this->import->status->value,
+            'message' => __('Your :name import failed', ['name' => $this->import->name]),
+        ];
     }
 }
